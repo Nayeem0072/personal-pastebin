@@ -17,7 +17,7 @@ export default function LoginPage() {
     mutationFn: () => authApi.login(email, password),
     onSuccess: (data) => {
       qc.setQueryData(["me"], data);
-      navigate(params.get("next") ?? "/");
+      navigate(params.get("next") ?? "/new");
     },
     onError: (e: any) => setError(e.message),
   });

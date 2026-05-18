@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { AppShell } from "./components/layout/AppShell";
 import { ProtectedRoute } from "./components/layout/ProtectedRoute";
+import { useAuth } from "./hooks/useAuth";
 
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/auth/LoginPage";
@@ -21,12 +22,18 @@ import JoinOrgPage from "./pages/org/JoinOrgPage";
 import OrgListPage from "./pages/org/OrgListPage";
 import NotFoundPage from "./pages/errors/NotFoundPage";
 
+function HomeRedirect() {
+  const { isLoggedIn, isLoading } = useAuth();
+  if (isLoading) return null;
+  return isLoggedIn ? <Navigate to="/new" replace /> : <HomePage />;
+}
+
 export default function App() {
   return (
     <Routes>
       <Route element={<AppShell />}>
         {/* Public */}
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<HomeRedirect />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/search" element={<SearchPage />} />

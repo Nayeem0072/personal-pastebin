@@ -30,7 +30,7 @@ export default function SignupPage() {
 
   const signup = useMutation({
     mutationFn: () => authApi.signup(form),
-    onSuccess: (data) => { qc.setQueryData(["me"], data); navigate(params.get("next") ?? "/"); },
+    onSuccess: (data) => { qc.setQueryData(["me"], data); navigate(params.get("next") ?? "/new"); },
     onError: (e: any) => setError(e.message),
   });
 
