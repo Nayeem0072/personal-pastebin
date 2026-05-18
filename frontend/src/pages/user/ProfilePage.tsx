@@ -75,7 +75,7 @@ export default function ProfilePage() {
 
       {/* Docs */}
       <section>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, marginBottom: 16, flexWrap: "wrap" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 16 }}>
           <h2 style={{ fontSize: 11, fontWeight: 600, color: "#555568", textTransform: "uppercase", letterSpacing: "0.1em", margin: 0 }}>
             Pastes {docs.length > 0 && <span style={{ color: "#38383F", fontWeight: 400, fontSize: 11 }}>({filterQ ? `${filteredDocs.length}/` : ""}{docs.length})</span>}
           </h2>
@@ -84,7 +84,12 @@ export default function ProfilePage() {
               placeholder="Filter pastes..."
               value={filterQ}
               onChange={(e) => setFilterQ(e.target.value)}
-              style={{ maxWidth: 220, fontSize: 13 }}
+              prefix={
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <circle cx="6" cy="6" r="4" stroke="currentColor" strokeWidth="1.3"/>
+                  <path d="M9.5 9.5L13 13" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
+                </svg>
+              }
             />
           )}
         </div>

@@ -69,27 +69,30 @@ export function Sidebar() {
 
   return (
     <aside className="app-sidebar" style={{ flexDirection: "column", padding: "20px 12px" }}>
-      {/* Logo */}
-      <Link to="/new" style={{
-        display: "flex", alignItems: "center", gap: 10,
-        padding: "8px 10px", marginBottom: 28, textDecoration: "none",
-      }}>
-        <div style={{
-          width: 32, height: 32, borderRadius: 10,
-          background: "linear-gradient(135deg, #00C4FF, #0080FF)",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          flexShrink: 0,
+      {/* Logo + notification bell */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 28, padding: "0 2px" }}>
+        <Link to="/new" style={{
+          display: "flex", alignItems: "center", gap: 10,
+          padding: "8px 10px", textDecoration: "none",
         }}>
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <path d="M3 2h7l3 3v9a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1z" fill="white"/>
-            <path d="M10 2l3 3h-2.5A.5.5 0 0110 4.5V2z" fill="rgba(0,128,255,0.4)"/>
-            <path d="M5 7h6M5 9.5h6M5 12h4" stroke="rgba(0,128,255,0.7)" strokeWidth="1.1" strokeLinecap="round"/>
-          </svg>
-        </div>
-        <span style={{ fontSize: 15, fontWeight: 700, color: "#EEEEF5", letterSpacing: "-0.3px" }}>
-          Clippr
-        </span>
-      </Link>
+          <div style={{
+            width: 32, height: 32, borderRadius: 10,
+            background: "linear-gradient(135deg, #00C4FF, #0080FF)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            flexShrink: 0,
+          }}>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M3 2h7l3 3v9a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1z" fill="white"/>
+              <path d="M10 2l3 3h-2.5A.5.5 0 0110 4.5V2z" fill="rgba(0,128,255,0.4)"/>
+              <path d="M5 7h6M5 9.5h6M5 12h4" stroke="rgba(0,128,255,0.7)" strokeWidth="1.1" strokeLinecap="round"/>
+            </svg>
+          </div>
+          <span style={{ fontSize: 15, fontWeight: 700, color: "#EEEEF5", letterSpacing: "-0.3px" }}>
+            Clippr
+          </span>
+        </Link>
+        <NotificationBell />
+      </div>
 
       {/* Nav section */}
       <p style={{ fontSize: 11, fontWeight: 600, color: "#555568", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 6, paddingLeft: 14 }}>
@@ -98,16 +101,15 @@ export function Sidebar() {
       <nav style={{ display: "flex", flexDirection: "column", gap: 2, marginBottom: 24 }}>
         <NavLink to="/new" label="New Paste" icon={<PlusIcon />} exact />
         <NavLink to="/search" label="Explore" icon={<SearchIcon />} />
-        <NavLink to="/orgs" label="Organizations" icon={<OrgsIcon />} />
+        <NavLink to={`/${user?.handle}`} label="My Pastes" icon={<DocsIcon />} />
+        <NavLink to="/shared" label="Shared" icon={<SharedIcon />} />
       </nav>
 
       <p style={{ fontSize: 11, fontWeight: 600, color: "#555568", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 6, paddingLeft: 14 }}>
         Account
       </p>
       <nav style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-        <NavLink to={`/${user?.handle}`} label="My Pastes" icon={<DocsIcon />} />
-        <NavLink to="/shared" label="Shared" icon={<SharedIcon />} />
-        <NotificationBell />
+        <NavLink to="/orgs" label="Organizations" icon={<OrgsIcon />} />
         <NavLink to="/settings" label="Settings" icon={<SettingsIcon />} />
       </nav>
 

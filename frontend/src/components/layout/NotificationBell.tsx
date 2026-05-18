@@ -10,6 +10,7 @@ export function NotificationBell() {
   const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0 });
   const ref = useRef<HTMLDivElement>(null);
   const btnRef = useRef<HTMLButtonElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const qc = useQueryClient();
 
@@ -41,10 +42,13 @@ export function NotificationBell() {
     },
   });
 
-  // Close on outside click
+  // Close on outside click — must exclude both the button wrapper and the portal dropdown
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
+      if (
+        ref.current && !ref.current.contains(e.target as Node) &&
+        dropdownRef.current && !dropdownRef.current.contains(e.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
@@ -58,7 +62,7 @@ export function NotificationBell() {
   const handleOpen = () => {
     if (btnRef.current) {
       const rect = btnRef.current.getBoundingClientRect();
-      setDropdownPos({ top: rect.top, left: rect.right + 8 });
+      setDropdownPos({ top: rect.bottom + 8, left: rect.left });
     }
     setIsOpen((o) => !o);
   };
@@ -68,33 +72,39 @@ export function NotificationBell() {
       <button
         ref={btnRef}
         onClick={handleOpen}
-        className="nav-link"
-        style={{ width: "100%", background: "none", border: "none", cursor: "pointer", textAlign: "left" }}
         title="Notifications"
+        style={{
+          position: "relative", flexShrink: 0,
+          width: 34, height: 34, borderRadius: "50%",
+          border: "none", cursor: "pointer",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          background: isOpen ? "rgba(0,196,255,0.15)" : "rgba(255,255,255,0.06)",
+          color: isOpen ? "#00C4FF" : "#8A8AA2",
+          transition: "background 150ms, color 150ms",
+        }}
+        onMouseOver={e => { if (!isOpen) { e.currentTarget.style.background = "rgba(255,255,255,0.1)"; e.currentTarget.style.color = "#EEEEF5"; } }}
+        onMouseOut={e => { if (!isOpen) { e.currentTarget.style.background = "rgba(255,255,255,0.06)"; e.currentTarget.style.color = "#8A8AA2"; } }}
       >
-        <div style={{ position: "relative", display: "inline-flex", flexShrink: 0 }}>
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <path d="M8 1.5A4.5 4.5 0 003.5 6v3.5L2 11h12l-1.5-1.5V6A4.5 4.5 0 008 1.5z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round"/>
-            <path d="M6.5 12a1.5 1.5 0 003 0" stroke="currentColor" strokeWidth="1.3"/>
-          </svg>
-          {unread > 0 && (
-            <span style={{
-              position: "absolute", top: -4, right: -6,
-              minWidth: 14, height: 14, borderRadius: 7,
-              background: "#00C4FF", color: "#0A0A14",
-              fontSize: 9, fontWeight: 700,
-              display: "flex", alignItems: "center", justifyContent: "center",
-              padding: "0 3px", lineHeight: 1,
-            }}>
-              {unread > 9 ? "9+" : unread}
-            </span>
-          )}
-        </div>
-        Notifications
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M8 1.5A4.5 4.5 0 003.5 6v3.5L2 11h12l-1.5-1.5V6A4.5 4.5 0 008 1.5z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round"/>
+          <path d="M6.5 12a1.5 1.5 0 003 0" stroke="currentColor" strokeWidth="1.3"/>
+        </svg>
+        {unread > 0 && (
+          <span style={{
+            position: "absolute", top: 2, right: 2,
+            minWidth: 14, height: 14, borderRadius: 7,
+            background: "#00C4FF", color: "#0A0A14",
+            fontSize: 9, fontWeight: 700,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            padding: "0 3px", lineHeight: 1,
+          }}>
+            {unread > 9 ? "9+" : unread}
+          </span>
+        )}
       </button>
 
       {isOpen && createPortal(
-        <div style={{
+        <div ref={dropdownRef} style={{
           position: "fixed",
           top: dropdownPos.top,
           left: dropdownPos.left,
