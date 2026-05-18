@@ -1,0 +1,160 @@
+import { useState } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { docsApi } from "../../api/documents";
+import { useAuth } from "../../hooks/useAuth";
+import { DocViewer } from "../../components/document/DocViewer";
+import { SharePanel } from "../../components/document/SharePanel";
+import { Badge, PrivacyBadge } from "../../components/ui/Badge";
+import { Button } from "../../components/ui/Button";
+import { Modal } from "../../components/ui/Modal";
+import { PageLoader } from "../../components/ui/Spinner";
+import { useToast } from "../../components/ui/Toast";
+import { formatDate, formatRelative } from "../../lib/utils";
+
+export default function DocPage() {
+  const { slug } = useParams<{ slug: string }>();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const qc = useQueryClient();
+  const { toast } = useToast();
+  const [shareOpen, setShareOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["doc", slug],
+    queryFn: () => docsApi.get(slug!),
+  });
+
+  const deleteDoc = useMutation({
+    mutationFn: () => docsApi.delete(slug!),
+    onSuccess: () => {
+      qc.removeQueries({ queryKey: ["doc", slug] });
+      if (user?.handle) qc.invalidateQueries({ queryKey: ["profile", user.handle] });
+      navigate(`/${user?.handle ?? ""}`);
+      toast("Paste deleted", "success");
+    },
+  });
+
+  if (isLoading) return <PageLoader />;
+  if (error) return (
+    <div className="text-center py-20">
+      <p className="text-2xl font-display font-bold text-ink-2 mb-2">404</p>
+      <p className="text-ink-3 text-sm">{(error as any).message}</p>
+      <Link to="/" style={{ color: "#00C4FF", fontSize: 14, marginTop: 12, display: "inline-block", textDecoration: "none" }}>← Back home</Link>
+    </div>
+  );
+
+  const { doc } = data!;
+  const isOwner = user?.id === doc.owner_id;
+
+  const copyUrl = () => {
+    navigator.clipboard.writeText(window.location.href);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div className="max-w-4xl mx-auto space-y-5">
+      {/* Header */}
+      <div className="flex items-start gap-4">
+        <div className="flex-1 min-w-0">
+          <h1 className="font-display text-2xl font-bold text-ink truncate">{doc.title}</h1>
+          <div className="flex items-center gap-3 mt-1.5 flex-wrap">
+            <Link to={`/${doc.owner.handle}`} style={{ fontSize: 13, color: "#8A8AA2", textDecoration: "none", fontFamily: "monospace" }}>
+              @{doc.owner.handle}
+            </Link>
+            <span className="text-ink-3/40 text-xs">·</span>
+            <span className="text-[13px] text-ink-3" title={formatDate(doc.created_at)}>
+              {formatRelative(doc.created_at)}
+            </span>
+            {doc.updated_at !== doc.created_at && (
+              <>
+                <span className="text-ink-3/40 text-xs">·</span>
+                <span className="text-[13px] text-ink-3">edited {formatRelative(doc.updated_at)}</span>
+              </>
+            )}
+          </div>
+          {doc.description && <p className="text-[13px] text-ink-3 mt-2">{doc.description}</p>}
+        </div>
+
+        <div className="flex items-center gap-2 shrink-0">
+          <Badge>{doc.language}</Badge>
+          <PrivacyBadge privacy={doc.privacy} />
+        </div>
+      </div>
+
+      {/* Toolbar */}
+      <div className="flex items-center gap-2 flex-wrap">
+        <Button variant="ghost" size="sm" onClick={copyUrl}>
+          {copied ? (
+            <><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/></svg> Copied</>
+          ) : (
+            <><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="3" width="7" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.2"/><path d="M4 3V2.5A1.5 1.5 0 015.5 1h3A1.5 1.5 0 0110 2.5v6A1.5 1.5 0 018.5 10H8" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></svg> Copy Link</>
+          )}
+        </Button>
+
+        {isOwner && (
+          <>
+            <Link to={`/docs/${slug}/edit`}>
+              <Button variant="ghost" size="sm">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 1.5l2.5 2.5-6.5 6.5H1.5V8L8 1.5z" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                Edit
+              </Button>
+            </Link>
+            {doc.privacy === "private" && (
+              <Button variant="ghost" size="sm" onClick={() => setShareOpen(true)}>
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="9.5" cy="2.5" r="1.5" stroke="currentColor" strokeWidth="1.1"/><circle cx="9.5" cy="9.5" r="1.5" stroke="currentColor" strokeWidth="1.1"/><circle cx="2.5" cy="6" r="1.5" stroke="currentColor" strokeWidth="1.1"/><path d="M4 6l4-2.5M4 6l4 2.5" stroke="currentColor" strokeWidth="1.1"/></svg>
+                Share
+              </Button>
+            )}
+            <Button variant="danger" size="sm" onClick={() => setDeleteOpen(true)}>
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1.5 3h9M4 3V2a.5.5 0 01.5-.5h3A.5.5 0 018 2v1m1.5 0L9 10a.5.5 0 01-.5.5h-5A.5.5 0 013 10L2.5 3" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round"/></svg>
+              Delete
+            </Button>
+          </>
+        )}
+      </div>
+
+      {/* Code viewer */}
+      <div style={{ borderRadius: 14, overflow: "hidden", border: "1px solid #38383F" }}>
+        {/* Tab bar */}
+        <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 16px", background: "#28282F", borderBottom: "1px solid #38383F" }}>
+          <div style={{ display: "flex", gap: 6 }}>
+            <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#38383F" }} />
+            <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#38383F" }} />
+            <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#38383F" }} />
+          </div>
+          <span style={{ fontSize: 11, fontFamily: "monospace", color: "#555568" }}>{doc.title}.{doc.language}</span>
+        </div>
+
+        {doc.highlighted_html ? (
+          <DocViewer html={doc.highlighted_html} language={doc.language} content={doc.content} />
+        ) : (
+          <pre style={{ background: "#1C1C22", padding: "1.5rem", fontSize: 13, fontFamily: "JetBrains Mono, monospace", color: "#8A8AA2", overflowX: "auto", lineHeight: 1.75, margin: 0 }}>
+            {doc.content}
+          </pre>
+        )}
+      </div>
+
+      {/* Share modal */}
+      <Modal open={shareOpen} onClose={() => setShareOpen(false)} title="Share Paste">
+        <SharePanel slug={slug!} />
+      </Modal>
+
+      {/* Delete confirmation */}
+      <Modal open={deleteOpen} onClose={() => setDeleteOpen(false)} title="Delete paste?">
+        <p className="text-[13px] text-ink-3 mb-5 leading-relaxed">
+          <strong className="text-ink">"{doc.title}"</strong> will be permanently deleted. This cannot be undone.
+        </p>
+        <div className="flex gap-2 justify-end">
+          <Button variant="ghost" size="sm" onClick={() => setDeleteOpen(false)}>Cancel</Button>
+          <Button variant="danger" size="sm" loading={deleteDoc.isPending} onClick={() => deleteDoc.mutate()}>
+            Delete
+          </Button>
+        </div>
+      </Modal>
+    </div>
+  );
+}

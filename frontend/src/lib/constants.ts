@@ -1,0 +1,45 @@
+export const SUPPORTED_LANGUAGES = [
+  { value: "plaintext", label: "Plain Text" },
+  { value: "typescript", label: "TypeScript" },
+  { value: "javascript", label: "JavaScript" },
+  { value: "tsx", label: "TSX" },
+  { value: "jsx", label: "JSX" },
+  { value: "python", label: "Python" },
+  { value: "rust", label: "Rust" },
+  { value: "go", label: "Go" },
+  { value: "java", label: "Java" },
+  { value: "c", label: "C" },
+  { value: "cpp", label: "C++" },
+  { value: "csharp", label: "C#" },
+  { value: "html", label: "HTML" },
+  { value: "css", label: "CSS" },
+  { value: "json", label: "JSON" },
+  { value: "yaml", label: "YAML" },
+  { value: "toml", label: "TOML" },
+  { value: "sql", label: "SQL" },
+  { value: "bash", label: "Bash" },
+  { value: "sh", label: "Shell" },
+  { value: "markdown", label: "Markdown" },
+  { value: "dockerfile", label: "Dockerfile" },
+  { value: "nginx", label: "Nginx" },
+  { value: "xml", label: "XML" },
+  { value: "php", label: "PHP" },
+  { value: "ruby", label: "Ruby" },
+  { value: "swift", label: "Swift" },
+  { value: "kotlin", label: "Kotlin" },
+  { value: "dart", label: "Dart" },
+  { value: "vue", label: "Vue" },
+  { value: "svelte", label: "Svelte" },
+];
+
+export const PRIVACY_OPTIONS = [
+  { value: "public", label: "Public", description: "Anyone can view" },
+  { value: "org", label: "Organization", description: "Only org members can view" },
+  { value: "private", label: "Private", description: "Only you and shared users" },
+] as const;
+
+export const ROLE_LABELS: Record<string, string> = {
+  owner: "Owner",
+  admin: "Admin",
+  member: "Member",
+};
