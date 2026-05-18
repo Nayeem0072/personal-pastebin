@@ -47,7 +47,7 @@ export default function NewDocPage() {
 
   return (
     <div style={{ maxWidth: 800, margin: "0 auto" }}>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
+      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 24, gap: 12, flexWrap: "wrap" }}>
         <div>
           <h1 style={{ fontSize: 20, fontWeight: 700, color: "#EEEEF5", margin: "0 0 4px" }}>New Paste</h1>
           <p style={{ fontSize: 13, color: "#555568", margin: 0 }}>Share code, configs, or notes</p>

@@ -270,6 +270,66 @@
 .md-body hr { border: none; border-top: 1px solid #38383F; margin: 1.5em 0; }
 .md-body img { max-width: 100%; border-radius: 8px; }
 
+/* Mobile nav */
+.mobile-nav {
+  display: none;
+}
+
+/* ── Mobile ─────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .app-sidebar { display: none; }
+
+  .app-main { padding: 20px 16px 84px; }
+
+  .topnav-content { padding: 20px 16px; }
+
+  .mobile-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: #21212A;
+    border-top: 1px solid #2E2E36;
+    z-index: 50;
+    align-items: stretch;
+    justify-content: space-around;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .mobile-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    flex: 1;
+    font-size: 10px;
+    font-weight: 500;
+    color: #555568;
+    text-decoration: none;
+    transition: color 150ms;
+    padding: 8px 0;
+    cursor: pointer;
+    background: none;
+    border: none;
+  }
+
+  .mobile-nav-item:hover,
+  .mobile-nav-item.active {
+    color: #00C4FF;
+  }
+
+  .mobile-nav-item.active svg {
+    color: #00C4FF;
+  }
+
+  /* Prevent horizontal overflow on small screens */
+  .pp-card { border-radius: 10px; }
+  .shiki { font-size: 12px; }
+}
+
 /* Animate spin for Spinner */
 @keyframes spin { to { transform: rotate(360deg); } }
 .animate-spin { animation: spin 0.75s linear infinite; }

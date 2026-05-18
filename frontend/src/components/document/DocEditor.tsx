@@ -31,7 +31,7 @@ export function DocEditor({
         value={content}
         onChange={(e) => onChange("content", e.target.value)}
         placeholder="// Paste your code, config, or text here..."
-        className="min-h-[440px] text-[13px] leading-7"
+        className="min-h-[260px] sm:min-h-[440px] text-[13px] leading-7"
         required
       />
 

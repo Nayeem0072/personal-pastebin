@@ -1,5 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
+import { useCallback } from "react";
 
 interface NavItem {
   to: string;
@@ -142,5 +143,48 @@ export function Sidebar() {
         </div>
       </div>
     </aside>
+  );
+}
+
+export function MobileNav() {
+  const { pathname } = useLocation();
+  const { user, logoutAsync } = useAuth();
+  const navigate = useNavigate();
+
+  const active = useCallback((path: string, exact = false) =>
+    exact ? pathname === path : pathname === path || pathname.startsWith(path + "/")
+  , [pathname]);
+
+  const handleLogout = async () => {
+    await logoutAsync();
+    navigate("/");
+  };
+
+  return (
+    <nav className="mobile-nav">
+      <Link to="/new" className={`mobile-nav-item ${active("/new", true) ? "active" : ""}`}>
+        <PlusIcon />
+        New
+      </Link>
+      <Link to="/search" className={`mobile-nav-item ${active("/search") ? "active" : ""}`}>
+        <SearchIcon />
+        Explore
+      </Link>
+      <Link to="/orgs" className={`mobile-nav-item ${active("/orgs") ? "active" : ""}`}>
+        <OrgsIcon />
+        Orgs
+      </Link>
+      <Link to={`/${user?.handle}`} className={`mobile-nav-item ${active(`/${user?.handle ?? "__"}`) ? "active" : ""}`}>
+        <DocsIcon />
+        Pastes
+      </Link>
+      <button className="mobile-nav-item" onClick={handleLogout}>
+        <svg width="16" height="16" viewBox="0 0 14 14" fill="none">
+          <path d="M9.5 4.5l2.5 2.5-2.5 2.5M12 7H5.5M7 2H2.5A.5.5 0 002 2.5v9a.5.5 0 00.5.5H7"
+            stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+        Logout
+      </button>
+    </nav>
   );
 }

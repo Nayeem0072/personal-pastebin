@@ -62,6 +62,12 @@ Route files map 1:1 to resource: `auth.ts`, `documents.ts`, `organizations.ts`, 
 - Organizations have `public`/`private` visibility. Members have roles: `owner`, `admin`, `member`
 - Invite flow: `GET /api/orgs/join/:code` previews, `POST` joins. Frontend auto-joins on page load if user is already authenticated.
 
+### Mobile
+All UI work must be mobile-friendly. Breakpoint is `768px`. On mobile:
+- The sidebar is hidden; a fixed bottom nav (`MobileNav` from `Sidebar.tsx`) is shown instead
+- `app-main` gets reduced padding and extra bottom padding (84px) for the nav bar
+- New components should use `flexWrap`, avoid fixed widths, and test at 375px width
+
 ### Deployment
 - **Frontend**: Vercel — set `VITE_API_URL` to the backend URL
 - **Backend**: Docker on VM — `docker-compose.yml` at repo root, SQLite stored in named volume `db_data`

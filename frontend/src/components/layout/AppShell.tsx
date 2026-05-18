@@ -1,5 +1,5 @@
 import { Outlet, useLocation } from "react-router-dom";
-import { Sidebar } from "./Sidebar";
+import { Sidebar, MobileNav } from "./Sidebar";
 import { TopNav } from "./TopNav";
 import { ToastProvider } from "../ui/Toast";
 import { useAuth } from "../../hooks/useAuth";
@@ -52,6 +52,7 @@ export function AppShell() {
           </main>
         </div>
       </div>
+      <MobileNav />
     </ToastProvider>
   );
 }
