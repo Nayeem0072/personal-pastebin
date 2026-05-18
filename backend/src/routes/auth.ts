@@ -42,7 +42,7 @@ const getFullUser = db.query<AuthUser, [number]>(
 // POST /api/auth/signup
 app.post("/signup", async (c) => {
   const ip = c.req.header("x-forwarded-for") ?? "unknown";
-  if (checkRateLimit(`signup:${ip}`, 3600, 10)) {
+  if (isProduction && checkRateLimit(`signup:${ip}`, 3600, 10)) {
     return c.json({ error: "Too many signup attempts. Try again later." }, 429);
   }
 
