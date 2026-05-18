@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { authApi } from "../../api/auth";
 import { Input } from "../../components/ui/Input";
@@ -10,6 +10,7 @@ export default function SignupPage() {
   const [handleStatus, setHandleStatus] = useState<"idle" | "checking" | "available" | "taken">("idle");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const [params] = useSearchParams();
   const qc = useQueryClient();
 
   useEffect(() => {
@@ -29,7 +30,7 @@ export default function SignupPage() {
 
   const signup = useMutation({
     mutationFn: () => authApi.signup(form),
-    onSuccess: (data) => { qc.setQueryData(["me"], data); navigate("/"); },
+    onSuccess: (data) => { qc.setQueryData(["me"], data); navigate(params.get("next") ?? "/"); },
     onError: (e: any) => setError(e.message),
   });
 

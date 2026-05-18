@@ -6,10 +6,11 @@ import { Button } from "../../components/ui/Button";
 import { PageLoader } from "../../components/ui/Spinner";
 import { useToast } from "../../components/ui/Toast";
 import { formatDate } from "../../lib/utils";
+import { useEffect } from "react";
 
 export default function JoinOrgPage() {
   const { code } = useParams<{ code: string }>();
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, isLoading: authLoading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -27,7 +28,14 @@ export default function JoinOrgPage() {
     onError: (e: any) => toast(e.message, "error"),
   });
 
-  if (isLoading) return <PageLoader />;
+  // Auto-join when user arrives already logged in (e.g. redirected after signup/login)
+  useEffect(() => {
+    if (isLoggedIn && data && !join.isPending && !join.isSuccess && !join.isError) {
+      join.mutate();
+    }
+  }, [isLoggedIn, data]);
+
+  if (isLoading || authLoading) return <PageLoader />;
 
   if (error) {
     return (
@@ -70,7 +78,7 @@ export default function JoinOrgPage() {
         )}
 
         {isLoggedIn ? (
-          <Button style={{ width: "100%" }} onClick={() => join.mutate()} loading={join.isPending}>
+          <Button style={{ width: "100%" }} onClick={() => join.mutate()} loading={join.isPending || join.isSuccess}>
             Join {org.name}
           </Button>
         ) : (
