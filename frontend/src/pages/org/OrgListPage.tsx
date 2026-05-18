@@ -5,14 +5,22 @@ import { OrgCard } from "../../components/org/OrgCard";
 import { Button } from "../../components/ui/Button";
 import { PageLoader } from "../../components/ui/Spinner";
 import { EmptyState } from "../../components/ui/EmptyState";
+import { ApiError } from "../../api/client";
 
 export default function OrgListPage() {
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["my-orgs"],
     queryFn: () => orgsApi.list(),
+    retry: (_, err) => !(err instanceof ApiError && err.status === 401),
   });
 
   if (isLoading) return <PageLoader />;
+
+  if (error) return (
+    <div style={{ textAlign: "center", padding: "64px 24px" }}>
+      <p style={{ color: "#555568", fontSize: 14 }}>{(error as any).message}</p>
+    </div>
+  );
 
   const orgs = data?.orgs ?? [];
 
