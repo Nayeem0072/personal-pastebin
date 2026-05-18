@@ -90,6 +90,7 @@
 }
 
 .app-sidebar {
+  display: flex;
   width: 220px;
   flex-shrink: 0;
   background: #21212A;

@@ -58,7 +58,7 @@ export function Sidebar() {
   const navigate = useNavigate();
 
   return (
-    <aside className="app-sidebar" style={{ display: "flex", flexDirection: "column", padding: "20px 12px" }}>
+    <aside className="app-sidebar" style={{ flexDirection: "column", padding: "20px 12px" }}>
       {/* Logo */}
       <Link to="/new" style={{
         display: "flex", alignItems: "center", gap: 10,
