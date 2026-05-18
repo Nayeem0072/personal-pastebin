@@ -74,7 +74,7 @@ app.post("/signup", async (c) => {
   const token = await signJWT({ sub: String(userId), handle });
   setCookieToken(c, token);
 
-  return c.json({ user }, 201);
+  return c.json({ user, token }, 201);
 });
 
 // POST /api/auth/login
@@ -102,7 +102,7 @@ app.post("/login", async (c) => {
   const token = await signJWT({ sub: String(row.id), handle: row.handle });
   setCookieToken(c, token);
 
-  return c.json({ user });
+  return c.json({ user, token });
 });
 
 // POST /api/auth/logout

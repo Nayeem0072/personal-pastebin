@@ -10,13 +10,24 @@ export class ApiError extends Error {
   }
 }
 
+export function getToken(): string | null {
+  return localStorage.getItem("auth_token");
+}
+
+export function setToken(token: string | null) {
+  if (token) localStorage.setItem("auth_token", token);
+  else localStorage.removeItem("auth_token");
+}
+
 export async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
+  const token = getToken();
   const res = await fetch(`${BASE}${path}`, {
     ...init,
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
       "ngrok-skip-browser-warning": "true",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...(init?.headers ?? {}),
     },
   });

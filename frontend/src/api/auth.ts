@@ -1,4 +1,4 @@
-import { apiFetch } from "./client";
+import { apiFetch, setToken } from "./client";
 
 export interface User {
   id: number;
@@ -12,17 +12,27 @@ export interface User {
 
 export const authApi = {
   me: () => apiFetch<{ user: User }>("/api/auth/me"),
-  login: (email: string, password: string) =>
-    apiFetch<{ user: User }>("/api/auth/login", {
+  login: async (email: string, password: string) => {
+    const res = await apiFetch<{ user: User; token: string }>("/api/auth/login", {
       method: "POST",
       body: JSON.stringify({ email, password }),
-    }),
-  signup: (data: { email: string; password: string; handle: string; display_name?: string }) =>
-    apiFetch<{ user: User }>("/api/auth/signup", {
+    });
+    setToken(res.token);
+    return res;
+  },
+  signup: async (data: { email: string; password: string; handle: string; display_name?: string }) => {
+    const res = await apiFetch<{ user: User; token: string }>("/api/auth/signup", {
       method: "POST",
       body: JSON.stringify(data),
-    }),
-  logout: () => apiFetch<{ ok: true }>("/api/auth/logout", { method: "POST" }),
+    });
+    setToken(res.token);
+    return res;
+  },
+  logout: async () => {
+    const res = await apiFetch<{ ok: true }>("/api/auth/logout", { method: "POST" });
+    setToken(null);
+    return res;
+  },
   checkHandle: (handle: string) =>
     apiFetch<{ available: boolean }>(`/api/auth/check-handle?handle=${encodeURIComponent(handle)}`),
 };

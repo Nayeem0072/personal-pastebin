@@ -12,7 +12,8 @@ const getUser = db.query<AuthUser, [number]>(
 export const optionalAuth = createMiddleware<{ Variables: { user: AuthUser | null } }>(
   async (c, next) => {
     c.set("user", null);
-    const token = getCookie(c, "token");
+    const authHeader = c.req.header("Authorization");
+    const token = (authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null) ?? getCookie(c, "token");
     if (token) {
       try {
         const payload = await verifyJWT(token);

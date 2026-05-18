@@ -6,7 +6,7 @@ const frontendUrl = process.env.FRONTEND_URL ?? "http://localhost:5173";
 export const cors = honoCors({
   origin: frontendUrl,
   allowMethods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
-  allowHeaders: ["Content-Type", "ngrok-skip-browser-warning"],
+  allowHeaders: ["Content-Type", "Authorization", "ngrok-skip-browser-warning"],
   credentials: true,
   maxAge: 86400,
 });

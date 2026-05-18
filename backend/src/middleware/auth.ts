@@ -9,7 +9,8 @@ const getUser = db.query<AuthUser, [number]>(
 );
 
 export const requireAuth = createMiddleware<{ Variables: Variables }>(async (c, next) => {
-  const token = getCookie(c, "token");
+  const authHeader = c.req.header("Authorization");
+  const token = (authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null) ?? getCookie(c, "token");
   if (!token) return c.json({ error: "Unauthorized" }, 401);
 
   try {
