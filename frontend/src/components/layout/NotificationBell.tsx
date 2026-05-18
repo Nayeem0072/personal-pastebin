@@ -62,7 +62,9 @@ export function NotificationBell() {
   const handleOpen = () => {
     if (btnRef.current) {
       const rect = btnRef.current.getBoundingClientRect();
-      setDropdownPos({ top: rect.bottom + 8, left: rect.left });
+      const dropdownWidth = 320;
+      const left = Math.max(8, rect.right - dropdownWidth);
+      setDropdownPos({ top: rect.bottom + 8, left });
     }
     setIsOpen((o) => !o);
   };
@@ -108,7 +110,7 @@ export function NotificationBell() {
           position: "fixed",
           top: dropdownPos.top,
           left: dropdownPos.left,
-          width: 320,
+          width: Math.min(320, window.innerWidth - 16),
           background: "#2E2E38",
           border: "1px solid #38383F",
           borderRadius: 14,

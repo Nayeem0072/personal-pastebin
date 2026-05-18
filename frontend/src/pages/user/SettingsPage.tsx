@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import { usersApi } from "../../api/users";
 import { useAuth } from "../../hooks/useAuth";
 import { Input } from "../../components/ui/Input";
@@ -7,7 +8,8 @@ import { Button } from "../../components/ui/Button";
 import { useToast } from "../../components/ui/Toast";
 
 export default function SettingsPage() {
-  const { user } = useAuth();
+  const { user, logoutAsync } = useAuth();
+  const navigate = useNavigate();
   const qc = useQueryClient();
   const { toast } = useToast();
 
@@ -87,6 +89,19 @@ export default function SettingsPage() {
             </Button>
           </div>
         </div>
+      </div>
+
+      {/* Danger zone */}
+      <div className="pp-card" style={{ padding: 24 }}>
+        <h2 style={{ fontSize: 14, fontWeight: 600, color: "#EEEEF5", margin: "0 0 20px", paddingBottom: 12, borderBottom: "1px solid #38383F" }}>
+          Account
+        </h2>
+        <Button
+          variant="danger"
+          onClick={async () => { await logoutAsync(); navigate("/"); }}
+        >
+          Sign out
+        </Button>
       </div>
     </div>
   );

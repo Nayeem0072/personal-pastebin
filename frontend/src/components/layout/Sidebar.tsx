@@ -160,10 +160,31 @@ export function Sidebar() {
   );
 }
 
+export function MobileTopBar() {
+  return (
+    <div className="mobile-topbar">
+      <Link to="/new" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
+        <div style={{
+          width: 28, height: 28, borderRadius: 8,
+          background: "linear-gradient(135deg, #00C4FF, #0080FF)",
+          display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+        }}>
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+            <path d="M3 2h7l3 3v9a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1z" fill="white"/>
+            <path d="M10 2l3 3h-2.5A.5.5 0 0110 4.5V2z" fill="rgba(0,128,255,0.4)"/>
+            <path d="M5 7h6M5 9.5h6M5 12h4" stroke="rgba(0,128,255,0.7)" strokeWidth="1.1" strokeLinecap="round"/>
+          </svg>
+        </div>
+        <span style={{ fontSize: 15, fontWeight: 700, color: "#EEEEF5", letterSpacing: "-0.3px" }}>Clippr</span>
+      </Link>
+      <NotificationBell />
+    </div>
+  );
+}
+
 export function MobileNav() {
   const { pathname } = useLocation();
-  const { user, logoutAsync } = useAuth();
-  const navigate = useNavigate();
+  const { user } = useAuth();
 
   const active = useCallback((path: string, exact = false) =>
     exact ? pathname === path : pathname === path || pathname.startsWith(path + "/")
@@ -176,11 +197,6 @@ export function MobileNav() {
   });
   const unreadCount = countData?.count ?? 0;
 
-  const handleLogout = async () => {
-    await logoutAsync();
-    navigate("/");
-  };
-
   return (
     <nav className="mobile-nav">
       <Link to="/new" className={`mobile-nav-item ${active("/new", true) ? "active" : ""}`}>
@@ -190,10 +206,6 @@ export function MobileNav() {
       <Link to="/search" className={`mobile-nav-item ${active("/search") ? "active" : ""}`}>
         <SearchIcon />
         Explore
-      </Link>
-      <Link to="/orgs" className={`mobile-nav-item ${active("/orgs") ? "active" : ""}`}>
-        <OrgsIcon />
-        Orgs
       </Link>
       <Link to={`/${user?.handle}`} className={`mobile-nav-item ${active(`/${user?.handle ?? "__"}`) ? "active" : ""}`}>
         <DocsIcon />
@@ -211,13 +223,14 @@ export function MobileNav() {
         </div>
         Shared
       </Link>
-      <button className="mobile-nav-item" onClick={handleLogout}>
-        <svg width="16" height="16" viewBox="0 0 14 14" fill="none">
-          <path d="M9.5 4.5l2.5 2.5-2.5 2.5M12 7H5.5M7 2H2.5A.5.5 0 002 2.5v9a.5.5 0 00.5.5H7"
-            stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-        Logout
-      </button>
+      <Link to="/orgs" className={`mobile-nav-item ${active("/orgs") ? "active" : ""}`}>
+        <OrgsIcon />
+        Orgs
+      </Link>
+      <Link to="/settings" className={`mobile-nav-item ${active("/settings") ? "active" : ""}`}>
+        <SettingsIcon />
+        Settings
+      </Link>
     </nav>
   );
 }
