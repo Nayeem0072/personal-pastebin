@@ -1,6 +1,9 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { useCallback } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { sendsApi } from "../../api/sends";
+import { NotificationBell } from "./NotificationBell";
 
 interface NavItem {
   to: string;
@@ -52,6 +55,13 @@ const SettingsIcon = () => (
     <path d="M8 1.5v2M8 12.5v2M1.5 8h2M12.5 8h2M3.4 3.4l1.41 1.41M11.19 11.19l1.41 1.41M3.4 12.6l1.41-1.41M11.19 4.81l1.41-1.41" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
   </svg>
 );
+const SharedIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+    <path d="M2 9h3l1.5 2h3L11 9h3v4a.5.5 0 01-.5.5h-11A.5.5 0 012 13V9z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round"/>
+    <path d="M2 9V4.5A.5.5 0 012.5 4h11a.5.5 0 01.5.5V9" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M8 2v5M6 5l2 2 2-2" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
 
 export function Sidebar() {
   const { user, logoutAsync } = useAuth();
@@ -59,27 +69,30 @@ export function Sidebar() {
 
   return (
     <aside className="app-sidebar" style={{ flexDirection: "column", padding: "20px 12px" }}>
-      {/* Logo */}
-      <Link to="/new" style={{
-        display: "flex", alignItems: "center", gap: 10,
-        padding: "8px 10px", marginBottom: 28, textDecoration: "none",
-      }}>
-        <div style={{
-          width: 32, height: 32, borderRadius: 10,
-          background: "linear-gradient(135deg, #00C4FF, #0080FF)",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          flexShrink: 0,
+      {/* Logo + notification bell */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 28, padding: "0 2px" }}>
+        <Link to="/new" style={{
+          display: "flex", alignItems: "center", gap: 10,
+          padding: "8px 10px", textDecoration: "none",
         }}>
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <path d="M3 2h7l3 3v9a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1z" fill="white"/>
-            <path d="M10 2l3 3h-2.5A.5.5 0 0110 4.5V2z" fill="rgba(0,128,255,0.4)"/>
-            <path d="M5 7h6M5 9.5h6M5 12h4" stroke="rgba(0,128,255,0.7)" strokeWidth="1.1" strokeLinecap="round"/>
-          </svg>
-        </div>
-        <span style={{ fontSize: 15, fontWeight: 700, color: "#EEEEF5", letterSpacing: "-0.3px" }}>
-          Clippr
-        </span>
-      </Link>
+          <div style={{
+            width: 32, height: 32, borderRadius: 10,
+            background: "linear-gradient(135deg, #00C4FF, #0080FF)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            flexShrink: 0,
+          }}>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M3 2h7l3 3v9a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1z" fill="white"/>
+              <path d="M10 2l3 3h-2.5A.5.5 0 0110 4.5V2z" fill="rgba(0,128,255,0.4)"/>
+              <path d="M5 7h6M5 9.5h6M5 12h4" stroke="rgba(0,128,255,0.7)" strokeWidth="1.1" strokeLinecap="round"/>
+            </svg>
+          </div>
+          <span style={{ fontSize: 15, fontWeight: 700, color: "#EEEEF5", letterSpacing: "-0.3px" }}>
+            Clippr
+          </span>
+        </Link>
+        <NotificationBell />
+      </div>
 
       {/* Nav section */}
       <p style={{ fontSize: 11, fontWeight: 600, color: "#555568", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 6, paddingLeft: 14 }}>
@@ -88,14 +101,15 @@ export function Sidebar() {
       <nav style={{ display: "flex", flexDirection: "column", gap: 2, marginBottom: 24 }}>
         <NavLink to="/new" label="New Paste" icon={<PlusIcon />} exact />
         <NavLink to="/search" label="Explore" icon={<SearchIcon />} />
-        <NavLink to="/orgs" label="Organizations" icon={<OrgsIcon />} />
+        <NavLink to={`/${user?.handle}`} label="My Pastes" icon={<DocsIcon />} />
+        <NavLink to="/shared" label="Shared" icon={<SharedIcon />} />
       </nav>
 
       <p style={{ fontSize: 11, fontWeight: 600, color: "#555568", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 6, paddingLeft: 14 }}>
         Account
       </p>
       <nav style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-        <NavLink to={`/${user?.handle}`} label="My Pastes" icon={<DocsIcon />} />
+        <NavLink to="/orgs" label="Organizations" icon={<OrgsIcon />} />
         <NavLink to="/settings" label="Settings" icon={<SettingsIcon />} />
       </nav>
 
@@ -146,19 +160,42 @@ export function Sidebar() {
   );
 }
 
+export function MobileTopBar() {
+  return (
+    <div className="mobile-topbar">
+      <Link to="/new" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
+        <div style={{
+          width: 28, height: 28, borderRadius: 8,
+          background: "linear-gradient(135deg, #00C4FF, #0080FF)",
+          display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+        }}>
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+            <path d="M3 2h7l3 3v9a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1z" fill="white"/>
+            <path d="M10 2l3 3h-2.5A.5.5 0 0110 4.5V2z" fill="rgba(0,128,255,0.4)"/>
+            <path d="M5 7h6M5 9.5h6M5 12h4" stroke="rgba(0,128,255,0.7)" strokeWidth="1.1" strokeLinecap="round"/>
+          </svg>
+        </div>
+        <span style={{ fontSize: 15, fontWeight: 700, color: "#EEEEF5", letterSpacing: "-0.3px" }}>Clippr</span>
+      </Link>
+      <NotificationBell />
+    </div>
+  );
+}
+
 export function MobileNav() {
   const { pathname } = useLocation();
-  const { user, logoutAsync } = useAuth();
-  const navigate = useNavigate();
+  const { user } = useAuth();
 
   const active = useCallback((path: string, exact = false) =>
     exact ? pathname === path : pathname === path || pathname.startsWith(path + "/")
   , [pathname]);
 
-  const handleLogout = async () => {
-    await logoutAsync();
-    navigate("/");
-  };
+  const { data: countData } = useQuery({
+    queryKey: ["unread-count"],
+    queryFn: sendsApi.getUnreadCount,
+    refetchInterval: 30_000,
+  });
+  const unreadCount = countData?.count ?? 0;
 
   return (
     <nav className="mobile-nav">
@@ -170,21 +207,30 @@ export function MobileNav() {
         <SearchIcon />
         Explore
       </Link>
-      <Link to="/orgs" className={`mobile-nav-item ${active("/orgs") ? "active" : ""}`}>
-        <OrgsIcon />
-        Orgs
-      </Link>
       <Link to={`/${user?.handle}`} className={`mobile-nav-item ${active(`/${user?.handle ?? "__"}`) ? "active" : ""}`}>
         <DocsIcon />
         Pastes
       </Link>
-      <button className="mobile-nav-item" onClick={handleLogout}>
-        <svg width="16" height="16" viewBox="0 0 14 14" fill="none">
-          <path d="M9.5 4.5l2.5 2.5-2.5 2.5M12 7H5.5M7 2H2.5A.5.5 0 002 2.5v9a.5.5 0 00.5.5H7"
-            stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-        Logout
-      </button>
+      <Link to="/shared" className={`mobile-nav-item ${active("/shared") ? "active" : ""}`}>
+        <div style={{ position: "relative", display: "inline-flex" }}>
+          <SharedIcon />
+          {unreadCount > 0 && (
+            <span style={{
+              position: "absolute", top: -3, right: -4,
+              width: 7, height: 7, borderRadius: "50%", background: "#00C4FF",
+            }} />
+          )}
+        </div>
+        Shared
+      </Link>
+      <Link to="/orgs" className={`mobile-nav-item ${active("/orgs") ? "active" : ""}`}>
+        <OrgsIcon />
+        Orgs
+      </Link>
+      <Link to="/settings" className={`mobile-nav-item ${active("/settings") ? "active" : ""}`}>
+        <SettingsIcon />
+        Settings
+      </Link>
     </nav>
   );
 }

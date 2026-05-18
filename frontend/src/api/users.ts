@@ -30,4 +30,9 @@ export const usersApi = {
     apiFetch<{ user: { id: number; handle: string; display_name: string | null; avatar_url: string | null } }>(
       `/api/users/resolve?q=${encodeURIComponent(q)}`
     ),
+
+  search: (q: string) =>
+    apiFetch<{ users: { id: number; handle: string; display_name: string | null }[] }>(
+      `/api/users/search?q=${encodeURIComponent(q)}`
+    ),
 };

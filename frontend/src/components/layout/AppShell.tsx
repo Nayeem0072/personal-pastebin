@@ -1,5 +1,5 @@
 import { Outlet, useLocation } from "react-router-dom";
-import { Sidebar, MobileNav } from "./Sidebar";
+import { Sidebar, MobileNav, MobileTopBar } from "./Sidebar";
 import { TopNav } from "./TopNav";
 import { ToastProvider } from "../ui/Toast";
 import { useAuth } from "../../hooks/useAuth";
@@ -47,6 +47,7 @@ export function AppShell() {
       <div className="app-layout">
         <Sidebar />
         <div className="app-content">
+          <MobileTopBar />
           <main className="app-main">
             <AnimatedOutlet />
           </main>

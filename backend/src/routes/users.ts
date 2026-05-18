@@ -18,6 +18,41 @@ const getPublicDocs = db.query<
   "SELECT slug, title, language, description, created_at FROM documents WHERE owner_id = ? AND privacy = 'public' ORDER BY created_at DESC LIMIT 50"
 );
 
+// GET /api/users/search?q= — prefix search on handle for autocomplete
+app.get("/search", requireAuth, (c) => {
+  const q = c.req.query("q") ?? "";
+  if (q.length < 1) return c.json({ users: [] });
+
+  const users = db
+    .query<
+      { id: number; handle: string; display_name: string | null },
+      [string, string]
+    >(
+      "SELECT id, handle, display_name FROM users WHERE handle LIKE ? OR display_name LIKE ? ORDER BY handle LIMIT 8"
+    )
+    .all(`${q}%`, `%${q}%`);
+
+  return c.json({ users });
+});
+
+// GET /api/users/resolve?q=handle_or_email
+app.get("/resolve", requireAuth, (c) => {
+  const q = c.req.query("q");
+  if (!q) return c.json({ error: "q is required" }, 400);
+
+  const user = db
+    .query<
+      { id: number; handle: string; display_name: string | null; avatar_url: string | null },
+      [string, string]
+    >(
+      "SELECT id, handle, display_name, avatar_url FROM users WHERE handle = ? OR email = ? LIMIT 1"
+    )
+    .get(q, q);
+
+  if (!user) return c.json({ error: "User not found" }, 404);
+  return c.json({ user });
+});
+
 // GET /api/users/:handle
 app.get("/:handle", optionalAuth, (c) => {
   const { handle } = c.req.param();
@@ -85,24 +120,6 @@ app.patch("/me", requireAuth, async (c) => {
   ).get(me.id);
 
   return c.json({ user: updated });
-});
-
-// GET /api/users/resolve?q=handle_or_email
-app.get("/resolve", requireAuth, (c) => {
-  const q = c.req.query("q");
-  if (!q) return c.json({ error: "q is required" }, 400);
-
-  const user = db
-    .query<
-      { id: number; handle: string; display_name: string | null; avatar_url: string | null },
-      [string, string]
-    >(
-      "SELECT id, handle, display_name, avatar_url FROM users WHERE handle = ? OR email = ? LIMIT 1"
-    )
-    .get(q, q);
-
-  if (!user) return c.json({ error: "User not found" }, 404);
-  return c.json({ user });
 });
 
 export default app;

@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { createPortal } from "react-dom";
 
 interface ModalProps {
   open: boolean;
@@ -18,19 +19,22 @@ export function Modal({ open, onClose, title, children, width = 440 }: ModalProp
 
   if (!open) return null;
 
-  return (
-    <div style={{
-      position: "fixed", inset: 0, zIndex: 50,
-      display: "flex", alignItems: "center", justifyContent: "center", padding: 16,
-    }}>
+  return createPortal(
+    <>
+      {/* Fixed backdrop — always covers the full viewport */}
       <div
         onClick={onClose}
-        style={{
-          position: "absolute", inset: 0,
-          background: "rgba(0,0,0,0.65)", backdropFilter: "blur(6px)",
-        }}
+        style={{ position: "fixed", inset: 0, zIndex: 50, background: "rgba(0,0,0,0.3)" }}
         className="animate-fade-in"
       />
+      {/* Scrollable container sits on top of backdrop */}
+      <div style={{
+        position: "fixed", inset: 0, zIndex: 51,
+        overflowY: "auto",
+        display: "flex", justifyContent: "center",
+        padding: "60px 16px 32px",
+        pointerEvents: "none",
+      }}>
       <div
         className="animate-fade-up"
         style={{
@@ -41,7 +45,10 @@ export function Modal({ open, onClose, title, children, width = 440 }: ModalProp
           padding: 24,
           width: "100%",
           maxWidth: width,
-          boxShadow: "0 24px 80px rgba(0,0,0,0.6)",
+          alignSelf: "flex-start",
+          marginBottom: 32,
+          boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
+          pointerEvents: "auto",
         }}
       >
         {title && (
@@ -66,6 +73,8 @@ export function Modal({ open, onClose, title, children, width = 440 }: ModalProp
         )}
         {children}
       </div>
-    </div>
+      </div>
+    </>,
+    document.body
   );
 }

@@ -5,6 +5,7 @@ import { docsApi } from "../../api/documents";
 import { useAuth } from "../../hooks/useAuth";
 import { DocViewer } from "../../components/document/DocViewer";
 import { SharePanel } from "../../components/document/SharePanel";
+import { SendPanel } from "../../components/document/SendPanel";
 import { Badge, PrivacyBadge } from "../../components/ui/Badge";
 import { Button } from "../../components/ui/Button";
 import { Modal } from "../../components/ui/Modal";
@@ -19,6 +20,7 @@ export default function DocPage() {
   const qc = useQueryClient();
   const { toast } = useToast();
   const [shareOpen, setShareOpen] = useState(false);
+  const [sendOpen, setSendOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -95,6 +97,16 @@ export default function DocPage() {
           )}
         </Button>
 
+        {user && doc.privacy !== "private" && (
+          <Button variant="ghost" size="sm" onClick={() => setSendOpen(true)}>
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M10.5 1.5L1.5 5l3.5 1.5 1.5 3.5 4-8.5z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/>
+              <path d="M5 6.5l2.5-2.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+            </svg>
+            Send
+          </Button>
+        )}
+
         {isOwner && (
           <>
             <Link to={`/docs/${slug}/edit`}>
@@ -137,6 +149,11 @@ export default function DocPage() {
           </pre>
         )}
       </div>
+
+      {/* Send modal */}
+      <Modal open={sendOpen} onClose={() => setSendOpen(false)} title="Send Paste">
+        <SendPanel slug={slug!} privacy={doc.privacy} />
+      </Modal>
 
       {/* Share modal */}
       <Modal open={shareOpen} onClose={() => setShareOpen(false)} title="Share Paste">

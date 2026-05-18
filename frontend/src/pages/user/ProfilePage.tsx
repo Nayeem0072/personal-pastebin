@@ -1,8 +1,10 @@
+import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { usersApi } from "../../api/users";
 import { useAuth } from "../../hooks/useAuth";
 import { DocCard } from "../../components/document/DocCard";
+import { Input } from "../../components/ui/Input";
 import { Button } from "../../components/ui/Button";
 import { PageLoader } from "../../components/ui/Spinner";
 import { EmptyState } from "../../components/ui/EmptyState";
@@ -11,6 +13,7 @@ import { formatDate } from "../../lib/utils";
 export default function ProfilePage() {
   const { handle } = useParams<{ handle: string }>();
   const { user: me } = useAuth();
+  const [filterQ, setFilterQ] = useState("");
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["profile", handle],
@@ -26,6 +29,14 @@ export default function ProfilePage() {
 
   const { user, docs } = data!;
   const isSelf = me?.id === user.id;
+
+  const filteredDocs = isSelf && filterQ
+    ? docs.filter((doc: any) =>
+        doc.title.toLowerCase().includes(filterQ.toLowerCase()) ||
+        (doc.description ?? "").toLowerCase().includes(filterQ.toLowerCase()) ||
+        doc.language.toLowerCase().includes(filterQ.toLowerCase())
+      )
+    : docs;
 
   return (
     <div style={{ maxWidth: 900, margin: "0 auto", display: "flex", flexDirection: "column", gap: 40 }}>
@@ -64,18 +75,35 @@ export default function ProfilePage() {
 
       {/* Docs */}
       <section>
-        <h2 style={{ fontSize: 11, fontWeight: 600, color: "#555568", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 16 }}>
-          Pastes {docs.length > 0 && <span style={{ color: "#38383F", fontWeight: 400, fontSize: 11 }}>({docs.length})</span>}
-        </h2>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 16 }}>
+          <h2 style={{ fontSize: 11, fontWeight: 600, color: "#555568", textTransform: "uppercase", letterSpacing: "0.1em", margin: 0 }}>
+            Pastes {docs.length > 0 && <span style={{ color: "#38383F", fontWeight: 400, fontSize: 11 }}>({filterQ ? `${filteredDocs.length}/` : ""}{docs.length})</span>}
+          </h2>
+          {isSelf && docs.length > 0 && (
+            <Input
+              placeholder="Filter pastes..."
+              value={filterQ}
+              onChange={(e) => setFilterQ(e.target.value)}
+              prefix={
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <circle cx="6" cy="6" r="4" stroke="currentColor" strokeWidth="1.3"/>
+                  <path d="M9.5 9.5L13 13" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
+                </svg>
+              }
+            />
+          )}
+        </div>
         {docs.length === 0 ? (
           <EmptyState
             title="No pastes yet"
             description={isSelf ? "Create your first paste to share code or configs." : undefined}
             action={isSelf ? <Link to="/new"><Button>Create Paste</Button></Link> : undefined}
           />
+        ) : filteredDocs.length === 0 ? (
+          <EmptyState title="No results" description="No pastes match your filter." />
         ) : (
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 12 }}>
-            {docs.map((doc: any) => (
+            {filteredDocs.map((doc: any) => (
               <DocCard key={doc.slug} {...doc} />
             ))}
           </div>

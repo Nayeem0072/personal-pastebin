@@ -20,6 +20,7 @@ import OrgRequestsPage from "./pages/org/OrgRequestsPage";
 import OrgSettingsPage from "./pages/org/OrgSettingsPage";
 import JoinOrgPage from "./pages/org/JoinOrgPage";
 import OrgListPage from "./pages/org/OrgListPage";
+import SharedPage from "./pages/shared/SharedPage";
 import NotFoundPage from "./pages/errors/NotFoundPage";
 
 function HomeRedirect() {
@@ -52,6 +53,8 @@ export default function App() {
         <Route path="/orgs/:slug/requests" element={<ProtectedRoute><OrgRequestsPage /></ProtectedRoute>} />
         <Route path="/orgs/:slug/settings" element={<ProtectedRoute><OrgSettingsPage /></ProtectedRoute>} />
         <Route path="/orgs/:slug" element={<OrgPage />} />
+
+        <Route path="/shared" element={<ProtectedRoute><SharedPage /></ProtectedRoute>} />
 
         {/* Handle routes last — must be after /orgs, /docs, etc. */}
         <Route path="/:handle" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
