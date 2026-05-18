@@ -33,10 +33,9 @@ export default function LoginPage() {
             margin: "0 auto 16px",
           }}>
             <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
-              <rect x="2" y="2" width="5.5" height="5.5" rx="1.5" fill="white"/>
-              <rect x="8.5" y="2" width="5.5" height="5.5" rx="1.5" fill="rgba(255,255,255,0.6)"/>
-              <rect x="2" y="8.5" width="5.5" height="5.5" rx="1.5" fill="rgba(255,255,255,0.6)"/>
-              <rect x="8.5" y="8.5" width="5.5" height="5.5" rx="1.5" fill="rgba(255,255,255,0.35)"/>
+              <path d="M3 2h7l3 3v9a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1z" fill="white"/>
+              <path d="M10 2l3 3h-2.5A.5.5 0 0110 4.5V2z" fill="rgba(0,128,255,0.4)"/>
+              <path d="M5 7h6M5 9.5h6M5 12h4" stroke="rgba(0,128,255,0.7)" strokeWidth="1.1" strokeLinecap="round"/>
             </svg>
           </div>
           <h1 style={{ fontSize: 22, fontWeight: 700, color: "#EEEEF5", margin: "0 0 6px" }}>Welcome back</h1>
