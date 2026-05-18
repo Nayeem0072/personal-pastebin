@@ -16,6 +16,7 @@ export async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> 
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
+      "ngrok-skip-browser-warning": "true",
       ...(init?.headers ?? {}),
     },
   });
