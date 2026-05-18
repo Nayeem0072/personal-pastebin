@@ -9,17 +9,27 @@ export function useAuth() {
 
   const { data, isLoading } = useQuery({
     queryKey: ["me"],
-    queryFn: () => authApi.me(),
-    retry: (_, err) => !(err instanceof ApiError && err.status === 401),
-    staleTime: 5 * 60_000,       // treat as fresh for 5 minutes
-    gcTime: 10 * 60_000,         // keep in cache for 10 minutes
-    enabled: !!getToken(),        // don't even try if no token stored
+    queryFn: async () => {
+      try {
+        return await authApi.me();
+      } catch (err) {
+        if (err instanceof ApiError && err.status === 401) {
+          setToken(null); // invalid/expired token — clear it so we stop trying
+        }
+        throw err;
+      }
+    },
+    retry: false,
+    staleTime: 5 * 60_000,
+    gcTime: 10 * 60_000,
+    enabled: !!getToken(),
   });
 
   const logout = useMutation({
     mutationFn: () => authApi.logout(),
     onSettled: () => {
-      qc.clear();
+      qc.setQueryData(["me"], null);
+      qc.removeQueries({ queryKey: ["me"] });
       navigate("/", { replace: true });
     },
   });
