@@ -75,8 +75,15 @@ export default function JoinOrgPage() {
           </Button>
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            <p style={{ fontSize: 13, color: "#555568", margin: 0 }}>Sign in to join this organization.</p>
+            <p style={{ fontSize: 13, color: "#555568", margin: 0 }}>Create an account or sign in to join.</p>
             <Button
+              style={{ width: "100%" }}
+              onClick={() => navigate(`/signup?next=/join/${code}`)}
+            >
+              Sign Up to Join
+            </Button>
+            <Button
+              variant="secondary"
               style={{ width: "100%" }}
               onClick={() => navigate(`/login?next=/join/${code}`)}
             >
