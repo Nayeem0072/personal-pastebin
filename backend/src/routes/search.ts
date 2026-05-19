@@ -5,7 +5,7 @@ import type { AuthUser } from "../types";
 
 const app = new Hono<{ Variables: { user: AuthUser | null } }>();
 
-// GET /api/search?q=&org=&lang=&page=&limit=
+// GET /api/search?q=&org=&lang=&page=&limit= (org= accepts a group slug)
 app.get("/", optionalAuth, (c) => {
   const q = c.req.query("q")?.trim();
   if (!q || q.length < 2) return c.json({ error: "q must be at least 2 characters" }, 400);
@@ -28,7 +28,7 @@ app.get("/", optionalAuth, (c) => {
   if (me) {
     privacyClauses.push(`d.owner_id = ${me.id}`);
     privacyClauses.push(
-      `(d.privacy = 'org' AND d.org_id IN (SELECT org_id FROM org_members WHERE user_id = ${me.id}))`
+      `(d.privacy = 'group' AND d.group_id IN (SELECT group_id FROM group_members WHERE user_id = ${me.id}))`
     );
     privacyClauses.push(
       `d.id IN (SELECT doc_id FROM document_shares WHERE user_id = ${me.id})`
@@ -38,10 +38,10 @@ app.get("/", optionalAuth, (c) => {
   let orgFilter = "";
   if (org) {
     const orgRow = db.query<{ id: number }, [string]>(
-      "SELECT id FROM organizations WHERE slug = ?"
+      "SELECT id FROM groups WHERE slug = ?"
     ).get(org);
     if (orgRow) {
-      orgFilter = `AND d.org_id = ${orgRow.id}`;
+      orgFilter = `AND d.group_id = ${orgRow.id}`;
     }
   }
 
@@ -54,7 +54,7 @@ app.get("/", optionalAuth, (c) => {
 
   const sql = `
     SELECT
-      d.slug, d.title, d.language, d.privacy, d.org_id, d.created_at,
+      d.slug, d.title, d.language, d.privacy, d.group_id, d.created_at,
       u.handle as owner_handle, u.display_name as owner_display_name,
       snippet(documents_fts, 2, '<mark>', '</mark>', '...', 20) as excerpt
     FROM documents_fts

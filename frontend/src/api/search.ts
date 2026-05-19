@@ -5,7 +5,7 @@ export interface SearchResult {
   title: string;
   language: string;
   privacy: string;
-  org_id: number | null;
+  group_id: number | null;
   created_at: number;
   owner_handle: string;
   owner_display_name: string | null;

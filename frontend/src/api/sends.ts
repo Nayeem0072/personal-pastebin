@@ -14,16 +14,28 @@ export interface SendSummary {
   sender_display_name: string | null;
 }
 
-export interface NotificationItem {
-  send_id: number;
-  read_at: number | null;
-  sent_at: number;
-  message: string | null;
-  slug: string;
-  title: string;
-  language: string;
-  sender_handle: string;
-}
+export type NotificationItem =
+  | {
+      id: number;
+      type: "document_send";
+      read_at: number | null;
+      created_at: number;
+      message: string | null;
+      doc_slug: string;
+      doc_title: string;
+      doc_language: string;
+      sender_handle: string;
+    }
+  | {
+      id: number;
+      type: "group_invite";
+      read_at: number | null;
+      created_at: number;
+      message: string | null;
+      group_slug: string;
+      group_name: string;
+      inviter_handle: string;
+    };
 
 export const sendsApi = {
   send: (data: { doc_slug: string; handle_or_email: string; message?: string }) =>

@@ -13,12 +13,12 @@ export function canViewDoc(doc: Document, userId: number | null): boolean {
       .get(doc.id, userId);
     return !!shared;
   }
-  if (doc.privacy === "org" && doc.org_id) {
+  if (doc.privacy === "group" && doc.group_id) {
     const member = db
       .query<{ user_id: number }, [number, number]>(
-        "SELECT user_id FROM org_members WHERE org_id = ? AND user_id = ?"
+        "SELECT user_id FROM group_members WHERE group_id = ? AND user_id = ?"
       )
-      .get(doc.org_id, userId);
+      .get(doc.group_id, userId);
     return !!member;
   }
   return false;

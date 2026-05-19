@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { docsApi } from "../../api/documents";
-import { orgsApi } from "../../api/organizations";
+import { groupsApi } from "../../api/groups";
 import { DocEditor } from "../../components/document/DocEditor";
 import { Button } from "../../components/ui/Button";
 import { useToast } from "../../components/ui/Toast";
@@ -20,12 +20,12 @@ export default function NewDocPage() {
     language: "plaintext",
     description: "",
     privacy: "public",
-    orgId: null as number | null,
+    groupId: null as number | null,
   });
 
-  const { data: orgsData } = useQuery({
-    queryKey: ["my-orgs"],
-    queryFn: () => orgsApi.list(),
+  const { data: groupsData } = useQuery({
+    queryKey: ["my-groups"],
+    queryFn: () => groupsApi.list(),
   });
 
   const create = useMutation({
@@ -36,7 +36,7 @@ export default function NewDocPage() {
         language: form.language,
         description: form.description || undefined,
         privacy: form.privacy,
-        org_id: form.privacy === "org" ? form.orgId ?? undefined : undefined,
+        group_id: form.privacy === "group" ? form.groupId ?? undefined : undefined,
       }),
     onSuccess: (data) => {
       if (user?.handle) qc.invalidateQueries({ queryKey: ["profile", user.handle] });
@@ -67,8 +67,8 @@ export default function NewDocPage() {
       <div className="pp-card" style={{ padding: 20 }}>
         <DocEditor
           {...form}
-          orgId={form.orgId}
-          userOrgs={orgsData?.orgs ?? []}
+          groupId={form.groupId}
+          userGroups={groupsData?.groups ?? []}
           onChange={(f, v) => setForm((prev) => ({ ...prev, [f]: v }))}
         />
       </div>

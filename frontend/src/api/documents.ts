@@ -8,8 +8,8 @@ export interface Document {
   language: string;
   description: string | null;
   highlighted_html: string | null;
-  privacy: "public" | "org" | "private";
-  org_id: number | null;
+  privacy: "public" | "group" | "private";
+  group_id: number | null;
   owner_id: number;
   created_at: number;
   updated_at: number;
@@ -38,7 +38,7 @@ export const docsApi = {
     language?: string;
     description?: string;
     privacy?: string;
-    org_id?: number;
+    group_id?: number;
   }) =>
     apiFetch<{ slug: string; title: string; language: string; privacy: string; created_at: number }>(
       "/api/documents",
@@ -52,7 +52,7 @@ export const docsApi = {
 
   update: (
     slug: string,
-    data: Partial<Pick<Document, "title" | "content" | "language" | "description" | "privacy" | "org_id">>
+    data: Partial<Pick<Document, "title" | "content" | "language" | "description" | "privacy" | "group_id">>
   ) =>
     apiFetch<{ doc: Document }>(`/api/documents/${slug}`, {
       method: "PATCH",

@@ -38,7 +38,7 @@ export function Badge({ children, variant = "default", className = "" }: BadgePr
 
 export function PrivacyBadge({ privacy }: { privacy: string }) {
   if (privacy === "public")  return <Badge variant="green">public</Badge>;
-  if (privacy === "org")     return <Badge variant="blue">org</Badge>;
+  if (privacy === "group")   return <Badge variant="blue">group</Badge>;
   return <Badge variant="yellow">private</Badge>;
 }
 

@@ -109,7 +109,7 @@ export function Sidebar() {
         Account
       </p>
       <nav style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-        <NavLink to="/orgs" label="Organizations" icon={<OrgsIcon />} />
+        <NavLink to="/groups" label="Groups" icon={<OrgsIcon />} />
         <NavLink to="/settings" label="Settings" icon={<SettingsIcon />} />
       </nav>
 
@@ -223,9 +223,9 @@ export function MobileNav() {
         </div>
         Shared
       </Link>
-      <Link to="/orgs" className={`mobile-nav-item ${active("/orgs") ? "active" : ""}`}>
+      <Link to="/groups" className={`mobile-nav-item ${active("/groups") ? "active" : ""}`}>
         <OrgsIcon />
-        Orgs
+        Groups
       </Link>
       <Link to="/settings" className={`mobile-nav-item ${active("/settings") ? "active" : ""}`}>
         <SettingsIcon />

@@ -12,14 +12,14 @@ import EditDocPage from "./pages/document/EditDocPage";
 import ProfilePage from "./pages/user/ProfilePage";
 import SettingsPage from "./pages/user/SettingsPage";
 import SearchPage from "./pages/search/SearchPage";
-import NewOrgPage from "./pages/org/NewOrgPage";
-import OrgPage from "./pages/org/OrgPage";
-import OrgMembersPage from "./pages/org/OrgMembersPage";
-import OrgInvitesPage from "./pages/org/OrgInvitesPage";
-import OrgRequestsPage from "./pages/org/OrgRequestsPage";
-import OrgSettingsPage from "./pages/org/OrgSettingsPage";
-import JoinOrgPage from "./pages/org/JoinOrgPage";
-import OrgListPage from "./pages/org/OrgListPage";
+import NewGroupPage from "./pages/group/NewGroupPage";
+import GroupPage from "./pages/group/GroupPage";
+import GroupMembersPage from "./pages/group/GroupMembersPage";
+import GroupInvitesPage from "./pages/group/GroupInvitesPage";
+import GroupRequestsPage from "./pages/group/GroupRequestsPage";
+import GroupSettingsPage from "./pages/group/GroupSettingsPage";
+import JoinGroupPage from "./pages/group/JoinGroupPage";
+import GroupListPage from "./pages/group/GroupListPage";
 import SharedPage from "./pages/shared/SharedPage";
 import NotFoundPage from "./pages/errors/NotFoundPage";
 
@@ -39,24 +39,24 @@ export default function App() {
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/docs/:slug" element={<DocPage />} />
-        <Route path="/join/:code" element={<JoinOrgPage />} />
+        <Route path="/join/:code" element={<JoinGroupPage />} />
 
         {/* Auth required */}
         <Route path="/new" element={<ProtectedRoute><NewDocPage /></ProtectedRoute>} />
         <Route path="/paste" element={<ProtectedRoute><NewDocPage /></ProtectedRoute>} />
         <Route path="/docs/:slug/edit" element={<ProtectedRoute><EditDocPage /></ProtectedRoute>} />
         <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
-        <Route path="/orgs" element={<ProtectedRoute><OrgListPage /></ProtectedRoute>} />
-        <Route path="/orgs/new" element={<ProtectedRoute><NewOrgPage /></ProtectedRoute>} />
-        <Route path="/orgs/:slug/members" element={<ProtectedRoute><OrgMembersPage /></ProtectedRoute>} />
-        <Route path="/orgs/:slug/invites" element={<ProtectedRoute><OrgInvitesPage /></ProtectedRoute>} />
-        <Route path="/orgs/:slug/requests" element={<ProtectedRoute><OrgRequestsPage /></ProtectedRoute>} />
-        <Route path="/orgs/:slug/settings" element={<ProtectedRoute><OrgSettingsPage /></ProtectedRoute>} />
-        <Route path="/orgs/:slug" element={<OrgPage />} />
+        <Route path="/groups" element={<ProtectedRoute><GroupListPage /></ProtectedRoute>} />
+        <Route path="/groups/new" element={<ProtectedRoute><NewGroupPage /></ProtectedRoute>} />
+        <Route path="/groups/:slug/members" element={<ProtectedRoute><GroupMembersPage /></ProtectedRoute>} />
+        <Route path="/groups/:slug/invites" element={<ProtectedRoute><GroupInvitesPage /></ProtectedRoute>} />
+        <Route path="/groups/:slug/requests" element={<ProtectedRoute><GroupRequestsPage /></ProtectedRoute>} />
+        <Route path="/groups/:slug/settings" element={<ProtectedRoute><GroupSettingsPage /></ProtectedRoute>} />
+        <Route path="/groups/:slug" element={<GroupPage />} />
 
         <Route path="/shared" element={<ProtectedRoute><SharedPage /></ProtectedRoute>} />
 
-        {/* Handle routes last — must be after /orgs, /docs, etc. */}
+        {/* Handle routes last — must be after /groups, /docs, etc. */}
         <Route path="/:handle" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
 
         <Route path="*" element={<NotFoundPage />} />
