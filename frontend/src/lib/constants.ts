@@ -34,7 +34,7 @@ export const SUPPORTED_LANGUAGES = [
 
 export const PRIVACY_OPTIONS = [
   { value: "public", label: "Public", description: "Anyone can view" },
-  { value: "org", label: "Organization", description: "Only org members can view" },
+  { value: "group", label: "Group", description: "Only group members can view" },
   { value: "private", label: "Private", description: "Only you and shared users" },
 ] as const;
 

@@ -14,30 +14,30 @@ const app = new Hono<{ Variables: Vars }>();
 app.post("/", requireAuth, async (c) => {
   const me = c.var.user!;
   const body = await c.req.json();
-  const { title, content, language = "plaintext", description, privacy = "public", org_id } = body ?? {};
+  const { title, content, language = "plaintext", description, privacy = "public", group_id } = body ?? {};
 
   if (!content) return c.json({ error: "content is required" }, 400);
-  if (!["public", "org", "private"].includes(privacy)) {
-    return c.json({ error: "privacy must be public, org, or private" }, 400);
+  if (!["public", "group", "private"].includes(privacy)) {
+    return c.json({ error: "privacy must be public, group, or private" }, 400);
   }
 
-  if (privacy === "org") {
-    if (!org_id) return c.json({ error: "org_id required for org privacy" }, 400);
+  if (privacy === "group") {
+    if (!group_id) return c.json({ error: "group_id required for group privacy" }, 400);
     const member = db
       .query<{ user_id: number }, [number, number]>(
-        "SELECT user_id FROM org_members WHERE org_id = ? AND user_id = ?"
+        "SELECT user_id FROM group_members WHERE group_id = ? AND user_id = ?"
       )
-      .get(org_id, me.id);
-    if (!member) return c.json({ error: "You are not a member of that organization" }, 403);
+      .get(group_id, me.id);
+    if (!member) return c.json({ error: "You are not a member of that group" }, 403);
   }
 
   const slug = generateSlug();
   const highlighted_html = await highlightCode(content, language);
 
   db.prepare(
-    `INSERT INTO documents (slug, title, content, language, description, highlighted_html, privacy, org_id, owner_id)
+    `INSERT INTO documents (slug, title, content, language, description, highlighted_html, privacy, group_id, owner_id)
      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
-  ).run(slug, title ?? "Untitled", content, language, description ?? null, highlighted_html, privacy, org_id ?? null, me.id);
+  ).run(slug, title ?? "Untitled", content, language, description ?? null, highlighted_html, privacy, group_id ?? null, me.id);
 
   return c.json({ slug, title: title ?? "Untitled", language, privacy, created_at: Math.floor(Date.now() / 1000) }, 201);
 });
@@ -51,10 +51,10 @@ app.get("/", requireAuth, (c) => {
 
   const docs = db
     .query<
-      { slug: string; title: string; language: string; privacy: string; org_id: number | null; description: string | null; created_at: number; updated_at: number },
+      { slug: string; title: string; language: string; privacy: string; group_id: number | null; description: string | null; created_at: number; updated_at: number },
       [number, number, number]
     >(
-      "SELECT slug, title, language, privacy, org_id, description, created_at, updated_at FROM documents WHERE owner_id = ? ORDER BY created_at DESC LIMIT ? OFFSET ?"
+      "SELECT slug, title, language, privacy, group_id, description, created_at, updated_at FROM documents WHERE owner_id = ? ORDER BY created_at DESC LIMIT ? OFFSET ?"
     )
     .all(me.id, limit, offset);
 
@@ -98,7 +98,7 @@ app.patch("/:slug", requireAuth, async (c) => {
   if (doc.owner_id !== me.id) return c.json({ error: "Forbidden" }, 403);
 
   const body = await c.req.json();
-  const { title, content, language, description, privacy, org_id } = body ?? {};
+  const { title, content, language, description, privacy, group_id } = body ?? {};
 
   const updates: string[] = [];
   const values: (string | number | null)[] = [];
@@ -106,11 +106,11 @@ app.patch("/:slug", requireAuth, async (c) => {
   if (title !== undefined) { updates.push("title = ?"); values.push(title); }
   if (description !== undefined) { updates.push("description = ?"); values.push(description); }
   if (privacy !== undefined) {
-    if (!["public", "org", "private"].includes(privacy)) return c.json({ error: "Invalid privacy" }, 400);
+    if (!["public", "group", "private"].includes(privacy)) return c.json({ error: "Invalid privacy" }, 400);
     updates.push("privacy = ?");
     values.push(privacy);
   }
-  if (org_id !== undefined) { updates.push("org_id = ?"); values.push(org_id); }
+  if (group_id !== undefined) { updates.push("group_id = ?"); values.push(group_id); }
 
   if (content !== undefined || language !== undefined) {
     const newContent = content ?? doc.content;

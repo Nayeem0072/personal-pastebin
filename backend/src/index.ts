@@ -5,7 +5,7 @@ import { errorHandler } from "./middleware/errorHandler";
 import authRoutes from "./routes/auth";
 import userRoutes from "./routes/users";
 import docRoutes from "./routes/documents";
-import orgRoutes from "./routes/organizations";
+import groupRoutes from "./routes/groups";
 import searchRoutes from "./routes/search";
 import sendsRoutes from "./routes/sends";
 
@@ -17,7 +17,7 @@ app.onError(errorHandler);
 app.route("/api/auth", authRoutes);
 app.route("/api/users", userRoutes);
 app.route("/api/documents", docRoutes);
-app.route("/api/orgs", orgRoutes);
+app.route("/api/groups", groupRoutes);
 app.route("/api/search", searchRoutes);
 app.route("/api/sends", sendsRoutes);
 

@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { useNavigate, Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { sendsApi } from "../../api/sends";
+import { groupsApi } from "../../api/groups";
 import { formatRelative } from "../../lib/utils";
 
 export function NotificationBell() {
@@ -36,6 +37,15 @@ export function NotificationBell() {
 
   const markAllRead = useMutation({
     mutationFn: sendsApi.markAllRead,
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["unread-count"] });
+      qc.invalidateQueries({ queryKey: ["notifications"] });
+    },
+  });
+
+  const respondToInvite = useMutation({
+    mutationFn: ({ inviteId, action }: { inviteId: number; action: "accept" | "decline" }) =>
+      groupsApi.respondToHandleInvite(inviteId, action),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["unread-count"] });
       qc.invalidateQueries({ queryKey: ["notifications"] });
@@ -138,54 +148,126 @@ export function NotificationBell() {
           </div>
 
           {/* List */}
-          <div style={{ maxHeight: 360, overflowY: "auto" }}>
+          <div style={{ maxHeight: 400, overflowY: "auto" }}>
             {notifications.length === 0 ? (
               <div style={{ padding: "32px 16px", textAlign: "center", color: "#555568", fontSize: 13 }}>
                 No notifications yet
               </div>
             ) : (
-              notifications.map((n) => (
-                <button
-                  key={n.send_id}
-                  onClick={() => {
-                    markRead.mutate(n.send_id);
-                    navigate(`/docs/${n.slug}`);
-                    setIsOpen(false);
-                  }}
-                  style={{
-                    display: "flex", alignItems: "flex-start", gap: 10,
-                    width: "100%", padding: "12px 16px",
-                    background: n.read_at === null ? "rgba(0,196,255,0.04)" : "none",
-                    border: "none", borderBottom: "1px solid #38383F",
-                    cursor: "pointer", textAlign: "left",
-                    transition: "background 150ms",
-                  }}
-                  onMouseOver={e => (e.currentTarget.style.background = "rgba(255,255,255,0.04)")}
-                  onMouseOut={e => (e.currentTarget.style.background = n.read_at === null ? "rgba(0,196,255,0.04)" : "none")}
-                >
-                  <div style={{
-                    width: 6, height: 6, borderRadius: "50%", flexShrink: 0, marginTop: 5,
-                    background: n.read_at === null ? "#00C4FF" : "transparent",
-                  }} />
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{
-                      fontSize: 13, color: "#EEEEF5", margin: "0 0 2px",
-                      overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
-                    }}>
-                      {n.title}
-                    </p>
-                    <p style={{ fontSize: 11, color: "#555568", margin: 0 }}>
-                      <span style={{ fontFamily: "monospace" }}>@{n.sender_handle}</span>
-                      {" · "}{formatRelative(n.sent_at)}
-                    </p>
-                    {n.message && (
-                      <p style={{ fontSize: 11, color: "#8A8AA2", margin: "3px 0 0", fontStyle: "italic", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                        "{n.message}"
+              notifications.map((n) => {
+                if (n.type === "document_send") {
+                  return (
+                    <button
+                      key={`doc-${n.id}`}
+                      onClick={() => {
+                        markRead.mutate(n.id);
+                        navigate(`/docs/${n.doc_slug}`);
+                        setIsOpen(false);
+                      }}
+                      style={{
+                        display: "flex", alignItems: "flex-start", gap: 10,
+                        width: "100%", padding: "12px 16px",
+                        background: n.read_at === null ? "rgba(0,196,255,0.04)" : "none",
+                        border: "none", borderBottom: "1px solid #38383F",
+                        cursor: "pointer", textAlign: "left",
+                        transition: "background 150ms",
+                      }}
+                      onMouseOver={e => (e.currentTarget.style.background = "rgba(255,255,255,0.04)")}
+                      onMouseOut={e => (e.currentTarget.style.background = n.read_at === null ? "rgba(0,196,255,0.04)" : "none")}
+                    >
+                      <div style={{
+                        width: 6, height: 6, borderRadius: "50%", flexShrink: 0, marginTop: 5,
+                        background: n.read_at === null ? "#00C4FF" : "transparent",
+                      }} />
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <p style={{
+                          fontSize: 13, color: "#EEEEF5", margin: "0 0 2px",
+                          overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                        }}>
+                          {n.doc_title}
+                        </p>
+                        <p style={{ fontSize: 11, color: "#555568", margin: 0 }}>
+                          <span style={{ fontFamily: "monospace" }}>@{n.sender_handle}</span>
+                          {" · "}{formatRelative(n.created_at)}
+                        </p>
+                        {n.message && (
+                          <p style={{ fontSize: 11, color: "#8A8AA2", margin: "3px 0 0", fontStyle: "italic", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                            "{n.message}"
+                          </p>
+                        )}
+                      </div>
+                    </button>
+                  );
+                }
+
+                // group_invite
+                return (
+                  <div
+                    key={`invite-${n.id}`}
+                    style={{
+                      display: "flex", alignItems: "flex-start", gap: 10,
+                      padding: "12px 16px",
+                      background: n.read_at === null ? "rgba(0,196,255,0.04)" : "none",
+                      borderBottom: "1px solid #38383F",
+                    }}
+                    onClick={() => {
+                      if (n.read_at === null) {
+                        groupsApi.markHandleInviteRead(n.id);
+                        qc.invalidateQueries({ queryKey: ["unread-count"] });
+                        qc.invalidateQueries({ queryKey: ["notifications"] });
+                      }
+                    }}
+                  >
+                    <div style={{
+                      width: 6, height: 6, borderRadius: "50%", flexShrink: 0, marginTop: 5,
+                      background: n.read_at === null ? "#00C4FF" : "transparent",
+                    }} />
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <p style={{ fontSize: 13, color: "#EEEEF5", margin: "0 0 2px", fontWeight: 500 }}>
+                        Group invite: <span style={{ color: "#00C4FF" }}>{n.group_name}</span>
                       </p>
-                    )}
+                      <p style={{ fontSize: 11, color: "#555568", margin: "0 0 6px" }}>
+                        From <span style={{ fontFamily: "monospace" }}>@{n.inviter_handle}</span>
+                        {" · "}{formatRelative(n.created_at)}
+                      </p>
+                      {n.message && (
+                        <p style={{ fontSize: 11, color: "#8A8AA2", margin: "0 0 8px", fontStyle: "italic", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                          "{n.message}"
+                        </p>
+                      )}
+                      <div style={{ display: "flex", gap: 6 }}>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            respondToInvite.mutate({ inviteId: n.id, action: "accept" });
+                          }}
+                          disabled={respondToInvite.isPending}
+                          style={{
+                            padding: "4px 10px", borderRadius: 6, border: "none", cursor: "pointer",
+                            background: "#00C4FF", color: "#0A0A14", fontSize: 11, fontWeight: 600,
+                          }}
+                        >
+                          Accept
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            respondToInvite.mutate({ inviteId: n.id, action: "decline" });
+                          }}
+                          disabled={respondToInvite.isPending}
+                          style={{
+                            padding: "4px 10px", borderRadius: 6,
+                            border: "1px solid #38383F", cursor: "pointer",
+                            background: "none", color: "#8A8AA2", fontSize: 11, fontWeight: 600,
+                          }}
+                        >
+                          Decline
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                </button>
-              ))
+                );
+              })
             )}
           </div>
 

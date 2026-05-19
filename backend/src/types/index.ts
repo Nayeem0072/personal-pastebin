@@ -16,14 +16,14 @@ export interface Document {
   language: string;
   description: string | null;
   highlighted_html: string | null;
-  privacy: "public" | "org" | "private";
-  org_id: number | null;
+  privacy: "public" | "group" | "private";
+  group_id: number | null;
   owner_id: number;
   created_at: number;
   updated_at: number;
 }
 
-export interface Org {
+export interface Group {
   id: number;
   slug: string;
   name: string;
@@ -34,12 +34,17 @@ export interface Org {
   updated_at: number;
 }
 
-export interface OrgMember {
-  org_id: number;
+export interface GroupMember {
+  group_id: number;
   user_id: number;
   role: "owner" | "admin" | "member";
   joined_at: number;
 }
+
+/** @deprecated Use Group */
+export type Org = Group;
+/** @deprecated Use GroupMember */
+export type OrgMember = GroupMember;
 
 // Hono context variable types
 export type Variables = {

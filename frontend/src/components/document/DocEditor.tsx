@@ -2,7 +2,7 @@ import { Textarea } from "../ui/Textarea";
 import { Select } from "../ui/Select";
 import { Input } from "../ui/Input";
 import { SUPPORTED_LANGUAGES, PRIVACY_OPTIONS } from "../../lib/constants";
-import type { Org } from "../../api/organizations";
+import type { Group } from "../../api/groups";
 
 interface DocEditorProps {
   title: string;
@@ -10,13 +10,13 @@ interface DocEditorProps {
   language: string;
   description: string;
   privacy: string;
-  orgId: number | null;
-  userOrgs: Org[];
+  groupId: number | null;
+  userGroups: Group[];
   onChange: (field: string, value: string | number | null) => void;
 }
 
 export function DocEditor({
-  title, content, language, description, privacy, orgId, userOrgs, onChange,
+  title, content, language, description, privacy, groupId, userGroups, onChange,
 }: DocEditorProps) {
   return (
     <div className="space-y-4">
@@ -50,15 +50,15 @@ export function DocEditor({
             onChange={(e) => onChange("privacy", e.target.value)}
           />
         </div>
-        {privacy === "org" && (
+        {privacy === "group" && (
           <div className="w-44">
             <Select
-              value={orgId?.toString() ?? ""}
+              value={groupId?.toString() ?? ""}
               options={[
-                { value: "", label: "Select org..." },
-                ...userOrgs.map((o) => ({ value: String(o.id), label: o.name })),
+                { value: "", label: "Select group..." },
+                ...userGroups.map((g) => ({ value: String(g.id), label: g.name })),
               ]}
-              onChange={(e) => onChange("orgId", e.target.value ? Number(e.target.value) : null)}
+              onChange={(e) => onChange("groupId", e.target.value ? Number(e.target.value) : null)}
             />
           </div>
         )}

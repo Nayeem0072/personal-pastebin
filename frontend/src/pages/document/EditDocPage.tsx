@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { docsApi } from "../../api/documents";
-import { orgsApi } from "../../api/organizations";
+import { groupsApi } from "../../api/groups";
 import { useAuth } from "../../hooks/useAuth";
 import { DocEditor } from "../../components/document/DocEditor";
 import { Button } from "../../components/ui/Button";
@@ -21,9 +21,9 @@ export default function EditDocPage() {
     queryFn: () => docsApi.get(slug!),
   });
 
-  const { data: orgsData } = useQuery({
-    queryKey: ["my-orgs"],
-    queryFn: () => orgsApi.list(),
+  const { data: groupsData } = useQuery({
+    queryKey: ["my-groups"],
+    queryFn: () => groupsApi.list(),
   });
 
   const [form, setForm] = useState({
@@ -32,7 +32,7 @@ export default function EditDocPage() {
     language: "plaintext",
     description: "",
     privacy: "public",
-    orgId: null as number | null,
+    groupId: null as number | null,
   });
 
   useEffect(() => {
@@ -44,7 +44,7 @@ export default function EditDocPage() {
         language: d.language,
         description: d.description ?? "",
         privacy: d.privacy,
-        orgId: d.org_id,
+        groupId: d.group_id,
       });
     }
   }, [data]);
@@ -57,7 +57,7 @@ export default function EditDocPage() {
         language: form.language,
         description: form.description || undefined,
         privacy: form.privacy as any,
-        org_id: form.privacy === "org" ? form.orgId ?? undefined : undefined,
+        group_id: form.privacy === "group" ? form.groupId ?? undefined : undefined,
       }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["doc", slug] });
@@ -87,8 +87,8 @@ export default function EditDocPage() {
       <div className="pp-card" style={{ padding: 20 }}>
         <DocEditor
           {...form}
-          orgId={form.orgId}
-          userOrgs={orgsData?.orgs ?? []}
+          groupId={form.groupId}
+          userGroups={groupsData?.groups ?? []}
           onChange={(f, v) => setForm((prev) => ({ ...prev, [f]: v }))}
         />
       </div>

@@ -29,14 +29,14 @@ app.post("/", requireAuth, async (c) => {
   if (!recipient) return c.json({ error: "User not found" }, 404);
   if (recipient.id === me.id) return c.json({ error: "Cannot send to yourself" }, 400);
 
-  if (doc.privacy === "org" && doc.org_id) {
+  if (doc.privacy === "group" && doc.group_id) {
     const member = db
       .query<{ user_id: number }, [number, number]>(
-        "SELECT user_id FROM org_members WHERE org_id = ? AND user_id = ?"
+        "SELECT user_id FROM group_members WHERE group_id = ? AND user_id = ?"
       )
-      .get(doc.org_id, recipient.id);
+      .get(doc.group_id, recipient.id);
     if (!member) {
-      return c.json({ error: "Recipient is not a member of this document's organization" }, 403);
+      return c.json({ error: "Recipient is not a member of this document's group" }, 403);
     }
   }
 
@@ -115,41 +115,70 @@ app.get("/inbox", requireAuth, (c) => {
   return c.json({ sends, page, limit, total, has_more: offset + sends.length < total });
 });
 
-// GET /api/sends/notifications — recent notifications for bell dropdown
+// GET /api/sends/notifications — recent notifications for bell dropdown (doc sends + group invites)
 app.get("/notifications", requireAuth, (c) => {
   const me = c.var.user;
 
   const notifications = db
     .query<
       {
-        send_id: number;
+        id: number;
+        type: "document_send" | "group_invite";
         read_at: number | null;
-        sent_at: number;
+        created_at: number;
         message: string | null;
-        slug: string;
-        title: string;
-        language: string;
-        sender_handle: string;
+        doc_slug: string | null;
+        doc_title: string | null;
+        doc_language: string | null;
+        sender_handle: string | null;
+        group_slug: string | null;
+        group_name: string | null;
+        inviter_handle: string | null;
       },
-      [number]
+      [number, number]
     >(
       `SELECT
-         ds.id        AS send_id,
+         ds.id              AS id,
+         'document_send'    AS type,
          ds.read_at,
-         ds.created_at AS sent_at,
+         ds.created_at,
          ds.message,
-         d.slug,
-         d.title,
-         d.language,
-         u.handle     AS sender_handle
+         d.slug             AS doc_slug,
+         d.title            AS doc_title,
+         d.language         AS doc_language,
+         u.handle           AS sender_handle,
+         NULL               AS group_slug,
+         NULL               AS group_name,
+         NULL               AS inviter_handle
        FROM document_sends ds
        JOIN documents d ON ds.doc_id    = d.id
        JOIN users u     ON ds.sender_id = u.id
        WHERE ds.recipient_id = ?
-       ORDER BY ds.read_at ASC NULLS FIRST, ds.created_at DESC
+
+       UNION ALL
+
+       SELECT
+         gi.id              AS id,
+         'group_invite'     AS type,
+         gi.read_at,
+         gi.created_at,
+         gi.message,
+         NULL               AS doc_slug,
+         NULL               AS doc_title,
+         NULL               AS doc_language,
+         NULL               AS sender_handle,
+         g.slug             AS group_slug,
+         g.name             AS group_name,
+         u.handle           AS inviter_handle
+       FROM group_handle_invites gi
+       JOIN groups g ON gi.group_id  = g.id
+       JOIN users u  ON gi.inviter_id = u.id
+       WHERE gi.invitee_id = ? AND gi.status = 'pending'
+
+       ORDER BY read_at ASC NULLS FIRST, created_at DESC
        LIMIT 25`
     )
-    .all(me.id);
+    .all(me.id, me.id);
 
   return c.json({ notifications });
 });
@@ -158,19 +187,26 @@ app.get("/notifications", requireAuth, (c) => {
 app.get("/unread-count", requireAuth, (c) => {
   const me = c.var.user;
   const { cnt } = db
-    .query<{ cnt: number }, [number]>(
-      "SELECT COUNT(*) AS cnt FROM document_sends WHERE recipient_id = ? AND read_at IS NULL"
+    .query<{ cnt: number }, [number, number]>(
+      `SELECT (
+         SELECT COUNT(*) FROM document_sends WHERE recipient_id = ? AND read_at IS NULL
+       ) + (
+         SELECT COUNT(*) FROM group_handle_invites WHERE invitee_id = ? AND status = 'pending' AND read_at IS NULL
+       ) AS cnt`
     )
-    .get(me.id)!;
+    .get(me.id, me.id)!;
   return c.json({ count: cnt });
 });
 
-// PATCH /api/sends/read-all — mark all as read
+// PATCH /api/sends/read-all — mark all as read (doc sends + group invites)
 app.patch("/read-all", requireAuth, (c) => {
   const me = c.var.user;
   const result = db
     .prepare("UPDATE document_sends SET read_at = unixepoch() WHERE recipient_id = ? AND read_at IS NULL")
     .run(me.id);
+  db.prepare(
+    "UPDATE group_handle_invites SET read_at = unixepoch() WHERE invitee_id = ? AND status = 'pending' AND read_at IS NULL"
+  ).run(me.id);
   return c.json({ ok: true, updated: result.changes });
 });
 
