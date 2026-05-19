@@ -533,9 +533,14 @@ app.delete("/:slug/handle-invites/:id", requireAuth, (c) => {
   const role = getMemberRole(group.id, me.id);
   if (!isAdminOrAbove(role)) return c.json({ error: "Forbidden" }, 403);
 
-  db.prepare(
-    "DELETE FROM group_handle_invites WHERE id = ? AND group_id = ? AND status = 'pending'"
-  ).run(inviteId, group.id);
+  const invite = db
+    .query<{ id: number }, [number, number]>(
+      "SELECT id FROM group_handle_invites WHERE id = ? AND group_id = ? AND status = 'pending'"
+    )
+    .get(inviteId, group.id);
+  if (!invite) return c.json({ error: "Invite not found or already resolved" }, 404);
+
+  db.prepare("DELETE FROM group_handle_invites WHERE id = ?").run(inviteId);
   return c.json({ ok: true });
 });
 
