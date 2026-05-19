@@ -25,6 +25,7 @@ export function NotificationBell() {
     queryKey: ["notifications"],
     queryFn: sendsApi.getNotifications,
     enabled: isOpen,
+    refetchInterval: isOpen ? 15_000 : false,
   });
 
   const markRead = useMutation({
