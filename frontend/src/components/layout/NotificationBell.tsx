@@ -50,6 +50,11 @@ export function NotificationBell() {
       qc.invalidateQueries({ queryKey: ["unread-count"] });
       qc.invalidateQueries({ queryKey: ["notifications"] });
     },
+    onError: () => {
+      // Invite was cancelled or already responded to — clear stale notification
+      qc.invalidateQueries({ queryKey: ["unread-count"] });
+      qc.invalidateQueries({ queryKey: ["notifications"] });
+    },
   });
 
   // Close on outside click — must exclude both the button wrapper and the portal dropdown
