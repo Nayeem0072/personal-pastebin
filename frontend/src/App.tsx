@@ -21,6 +21,7 @@ import GroupSettingsPage from "./pages/group/GroupSettingsPage";
 import JoinGroupPage from "./pages/group/JoinGroupPage";
 import GroupListPage from "./pages/group/GroupListPage";
 import SharedPage from "./pages/shared/SharedPage";
+import SavedPage from "./pages/saved/SavedPage";
 import NotFoundPage from "./pages/errors/NotFoundPage";
 
 function HomeRedirect() {
@@ -55,6 +56,7 @@ export default function App() {
         <Route path="/groups/:slug" element={<GroupPage />} />
 
         <Route path="/shared" element={<ProtectedRoute><SharedPage /></ProtectedRoute>} />
+        <Route path="/saved"  element={<ProtectedRoute><SavedPage /></ProtectedRoute>} />
 
         {/* Handle routes last — must be after /groups, /docs, etc. */}
         <Route path="/:handle" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />

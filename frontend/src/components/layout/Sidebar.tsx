@@ -55,6 +55,11 @@ const SettingsIcon = () => (
     <path d="M8 1.5v2M8 12.5v2M1.5 8h2M12.5 8h2M3.4 3.4l1.41 1.41M11.19 11.19l1.41 1.41M3.4 12.6l1.41-1.41M11.19 4.81l1.41-1.41" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
   </svg>
 );
+const SavedIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+    <path d="M3 2h10a1 1 0 011 1v11l-5.5-2.75L3 14V3a1 1 0 011-1z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round"/>
+  </svg>
+);
 const SharedIcon = () => (
   <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
     <path d="M2 9h3l1.5 2h3L11 9h3v4a.5.5 0 01-.5.5h-11A.5.5 0 012 13V9z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round"/>
@@ -103,6 +108,7 @@ export function Sidebar() {
         <NavLink to="/search" label="Explore" icon={<SearchIcon />} />
         <NavLink to={`/${user?.handle}`} label="My Pastes" icon={<DocsIcon />} />
         <NavLink to="/shared" label="Shared" icon={<SharedIcon />} />
+        <NavLink to="/saved" label="Saved" icon={<SavedIcon />} />
       </nav>
 
       <p style={{ fontSize: 11, fontWeight: 600, color: "#555568", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 6, paddingLeft: 14 }}>
@@ -222,6 +228,10 @@ export function MobileNav() {
           )}
         </div>
         Shared
+      </Link>
+      <Link to="/saved" className={`mobile-nav-item ${active("/saved") ? "active" : ""}`}>
+        <SavedIcon />
+        Saved
       </Link>
       <Link to="/groups" className={`mobile-nav-item ${active("/groups") ? "active" : ""}`}>
         <OrgsIcon />
