@@ -50,6 +50,18 @@ docker compose logs -f backend # Tail logs
 
 > **Important**: The production `.env` on the VM must set `DB_PATH=/data/pastebin.db` (not `./pastebin.db`). Using a relative path bypasses the mounted volume and the DB will be lost on every rebuild.
 
+## Workflow
+
+### Feature development
+When instructed to add a feature, always:
+1. Create a new branch off `main`: `git checkout -b feature/<short-name>`
+2. Implement the feature with tests
+3. Commit and push the branch
+Never implement features directly on `main`.
+
+### Bug fixes
+Bug fixes can be committed directly to the current branch (or a `fix/` branch if on `main`).
+
 ## Architecture
 
 This is a monorepo with a Bun workspace (`package.json` at root) containing `backend/` and `frontend/`.
