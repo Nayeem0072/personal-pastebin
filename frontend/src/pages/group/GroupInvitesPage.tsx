@@ -51,16 +51,18 @@ export default function GroupInvitesPage() {
   const suggestions = suggestData?.users ?? [];
 
   // Code invite queries
-  const { data: codeInvitesData, isLoading } = useQuery({
+  const { data: codeInvitesData, isLoading: codeLoading } = useQuery({
     queryKey: ["group-invites", slug],
     queryFn: () => groupsApi.getInvites(slug!),
   });
 
   // Handle invite list
-  const { data: handleInvitesData } = useQuery({
+  const { data: handleInvitesData, isLoading: handleLoading } = useQuery({
     queryKey: ["group-handle-invites", slug],
     queryFn: () => groupsApi.getHandleInvites(slug!),
   });
+
+  const isLoading = codeLoading || handleLoading;
 
   const createCodeInvite = useMutation({
     mutationFn: () => groupsApi.createInvite(slug!),
@@ -202,42 +204,43 @@ export default function GroupInvitesPage() {
         </div>
 
         {/* Pending handle invites list */}
-        {handleInvitesData && handleInvitesData.invites.length > 0 && (
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            <h3 style={{ fontSize: 13, fontWeight: 600, color: "#8A8AA2", margin: 0 }}>Pending Invites</h3>
-            {handleInvitesData.invites.map((inv) => (
-              <div key={inv.id} className="pp-card" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 16px", gap: 12 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <div style={{
-                    width: 32, height: 32, borderRadius: 8, flexShrink: 0,
-                    background: "linear-gradient(135deg, #00C4FF, #0080FF)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    fontSize: 12, fontWeight: 700, color: "#fff",
-                  }}>
-                    {inv.invitee_handle[0].toUpperCase()}
-                  </div>
-                  <div>
-                    <span style={{ fontSize: 14, fontWeight: 600, color: "#EEEEF5", fontFamily: "monospace" }}>@{inv.invitee_handle}</span>
-                    {inv.invitee_display_name && (
-                      <span style={{ fontSize: 12, color: "#555568", marginLeft: 8 }}>{inv.invitee_display_name}</span>
-                    )}
-                    <p style={{ fontSize: 11, color: "#555568", margin: "2px 0 0" }}>
-                      Invited by @{inv.inviter_handle} · {formatRelative(inv.created_at)}
-                    </p>
-                  </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          <h3 style={{ fontSize: 13, fontWeight: 600, color: "#8A8AA2", margin: 0 }}>Pending Invites</h3>
+          {handleInvitesData && handleInvitesData.invites.length === 0 && (
+            <p style={{ fontSize: 13, color: "#555568", margin: 0 }}>No pending invites.</p>
+          )}
+          {handleInvitesData?.invites.map((inv) => (
+            <div key={inv.id} className="pp-card" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 16px", gap: 12 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <div style={{
+                  width: 32, height: 32, borderRadius: 8, flexShrink: 0,
+                  background: "linear-gradient(135deg, #00C4FF, #0080FF)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 12, fontWeight: 700, color: "#fff",
+                }}>
+                  {inv.invitee_handle[0].toUpperCase()}
                 </div>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => cancelHandleInvite.mutate(inv.id)}
-                  loading={cancelHandleInvite.isPending}
-                >
-                  Cancel
-                </Button>
+                <div>
+                  <span style={{ fontSize: 14, fontWeight: 600, color: "#EEEEF5", fontFamily: "monospace" }}>@{inv.invitee_handle}</span>
+                  {inv.invitee_display_name && (
+                    <span style={{ fontSize: 12, color: "#555568", marginLeft: 8 }}>{inv.invitee_display_name}</span>
+                  )}
+                  <p style={{ fontSize: 11, color: "#555568", margin: "2px 0 0" }}>
+                    Invited by @{inv.inviter_handle} · {formatRelative(inv.created_at)}
+                  </p>
+                </div>
               </div>
-            ))}
-          </div>
-        )}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => cancelHandleInvite.mutate(inv.id)}
+                loading={cancelHandleInvite.isPending}
+              >
+                Cancel
+              </Button>
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* ── Invite Links (existing code-based) ── */}
