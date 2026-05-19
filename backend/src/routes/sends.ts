@@ -119,24 +119,24 @@ app.get("/inbox", requireAuth, (c) => {
 app.get("/notifications", requireAuth, (c) => {
   const me = c.var.user;
 
-  const notifications = db
-    .query<
-      {
-        id: number;
-        type: "document_send" | "group_invite";
-        read_at: number | null;
-        created_at: number;
-        message: string | null;
-        doc_slug: string | null;
-        doc_title: string | null;
-        doc_language: string | null;
-        sender_handle: string | null;
-        group_slug: string | null;
-        group_name: string | null;
-        inviter_handle: string | null;
-      },
-      [number, number]
-    >(
+  type NotificationRow = {
+    id: number;
+    type: "document_send" | "group_invite";
+    read_at: number | null;
+    created_at: number;
+    message: string | null;
+    doc_slug: string | null;
+    doc_title: string | null;
+    doc_language: string | null;
+    sender_handle: string | null;
+    group_slug: string | null;
+    group_name: string | null;
+    inviter_handle: string | null;
+  };
+
+  // Split into two queries to work around bun:sqlite's ? binding limitation across UNION ALL
+  const docSends = db
+    .query<NotificationRow, [number]>(
       `SELECT
          ds.id              AS id,
          'document_send'    AS type,
@@ -153,11 +153,13 @@ app.get("/notifications", requireAuth, (c) => {
        FROM document_sends ds
        JOIN documents d ON ds.doc_id    = d.id
        JOIN users u     ON ds.sender_id = u.id
-       WHERE ds.recipient_id = ?
+       WHERE ds.recipient_id = ?`
+    )
+    .all(me.id);
 
-       UNION ALL
-
-       SELECT
+  const groupInvites = db
+    .query<NotificationRow, [number]>(
+      `SELECT
          gi.id              AS id,
          'group_invite'     AS type,
          gi.read_at,
@@ -173,12 +175,17 @@ app.get("/notifications", requireAuth, (c) => {
        FROM group_handle_invites gi
        JOIN groups g ON gi.group_id  = g.id
        JOIN users u  ON gi.inviter_id = u.id
-       WHERE gi.invitee_id = ? AND gi.status = 'pending'
-
-       ORDER BY read_at ASC NULLS FIRST, created_at DESC
-       LIMIT 25`
+       WHERE gi.invitee_id = ? AND gi.status = 'pending'`
     )
-    .all(me.id, me.id);
+    .all(me.id);
+
+  const notifications = [...docSends, ...groupInvites]
+    .sort((a, b) => {
+      if (a.read_at === null && b.read_at !== null) return -1;
+      if (a.read_at !== null && b.read_at === null) return 1;
+      return b.created_at - a.created_at;
+    })
+    .slice(0, 25);
 
   return c.json({ notifications });
 });
