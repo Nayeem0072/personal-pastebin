@@ -8,6 +8,7 @@ import docRoutes from "./routes/documents";
 import groupRoutes from "./routes/groups";
 import searchRoutes from "./routes/search";
 import sendsRoutes from "./routes/sends";
+import savedRoutes from "./routes/saved";
 
 const app = new Hono();
 
@@ -20,6 +21,7 @@ app.route("/api/documents", docRoutes);
 app.route("/api/groups", groupRoutes);
 app.route("/api/search", searchRoutes);
 app.route("/api/sends", sendsRoutes);
+app.route("/api/saved", savedRoutes);
 
 app.get("/health", (c) => c.json({ ok: true, ts: Date.now() }));
 

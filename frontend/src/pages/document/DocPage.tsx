@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { docsApi } from "../../api/documents";
+import { savedApi } from "../../api/saved";
 import { useAuth } from "../../hooks/useAuth";
 import { DocViewer } from "../../components/document/DocViewer";
 import { SharePanel } from "../../components/document/SharePanel";
@@ -39,6 +40,35 @@ export default function DocPage() {
     },
   });
 
+  const isOwner = user?.id === data?.doc.owner_id;
+
+  const { data: savedData } = useQuery({
+    queryKey: ["saved-check", slug],
+    queryFn: () => savedApi.checkSaved(slug!),
+    enabled: !!user && !isOwner,
+    staleTime: 30_000,
+  });
+  const isSaved = savedData?.is_saved ?? false;
+
+  const saveDoc = useMutation({
+    mutationFn: () => savedApi.save(slug!),
+    onSuccess: () => {
+      qc.setQueryData(["saved-check", slug], { is_saved: true });
+      qc.invalidateQueries({ queryKey: ["saved"] });
+      toast("Paste saved", "success");
+    },
+    onError: (err: any) => toast(err.message ?? "Could not save", "error"),
+  });
+
+  const unsaveDoc = useMutation({
+    mutationFn: () => savedApi.unsave(slug!),
+    onSuccess: () => {
+      qc.setQueryData(["saved-check", slug], { is_saved: false });
+      qc.invalidateQueries({ queryKey: ["saved"] });
+      toast("Removed from saved", "success");
+    },
+  });
+
   if (isLoading) return <PageLoader />;
   if (error) return (
     <div className="text-center py-20">
@@ -49,7 +79,6 @@ export default function DocPage() {
   );
 
   const { doc } = data!;
-  const isOwner = user?.id === doc.owner_id;
 
   const copyUrl = () => {
     navigator.clipboard.writeText(window.location.href);
@@ -104,6 +133,21 @@ export default function DocPage() {
               <path d="M5 6.5l2.5-2.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
             </svg>
             Send
+          </Button>
+        )}
+
+        {user && !isOwner && doc.privacy !== "private" && (
+          <Button
+            variant="ghost"
+            size="sm"
+            loading={saveDoc.isPending || unsaveDoc.isPending}
+            onClick={() => isSaved ? unsaveDoc.mutate() : saveDoc.mutate()}
+          >
+            {isSaved ? (
+              <><svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M2 2h8a1 1 0 011 1v7.5L6.5 8.25 2 10.5V3a1 1 0 011-1z"/></svg> Saved</>
+            ) : (
+              <><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 2h8a1 1 0 011 1v7.5L6.5 8.25 2 10.5V3a1 1 0 011-1z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/></svg> Save</>
+            )}
           </Button>
         )}
 
