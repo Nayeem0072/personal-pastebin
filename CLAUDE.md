@@ -28,11 +28,27 @@ bun run start    # Run migrations then start server
 bun run migrate  # Run migrations only
 ```
 
+### Testing
+```bash
+cd backend
+~/.bun/bin/bun test                        # Run all backend tests
+~/.bun/bin/bun test src/routes/sends.test.ts  # Run a specific test file
+```
+
+Tests use Bun's built-in test runner (`bun:test`) with in-memory SQLite databases — no server needed. Test files live alongside the source files they cover (`*.test.ts`).
+
+**Testing policy**: whenever a backend route is added or modified, a corresponding `*.test.ts` file must be written or updated. Tests should cover:
+- Happy path for each new behaviour
+- Filtering/access-control (wrong user sees nothing)
+- Edge cases (empty results, declined/accepted states, etc.)
+
 ### Docker (production)
 ```bash
 docker compose up -d --build   # Rebuild and restart backend (data volume persists)
 docker compose logs -f backend # Tail logs
 ```
+
+> **Important**: The production `.env` on the VM must set `DB_PATH=/data/pastebin.db` (not `./pastebin.db`). Using a relative path bypasses the mounted volume and the DB will be lost on every rebuild.
 
 ## Architecture
 
@@ -40,7 +56,7 @@ This is a monorepo with a Bun workspace (`package.json` at root) containing `bac
 
 ### Backend (`backend/src/`)
 - **Runtime**: Bun + Hono framework
-- **Database**: SQLite via `bun:sqlite` — file path set by `DB_PATH` env var (defaults to `../../pastebin.db` in dev, `/data/pastebin.db` in Docker)
+- **Database**: SQLite via `bun:sqlite` — file path set by `DB_PATH` env var. Dev default: `./pastebin.db`. Production (Docker) must explicitly set `DB_PATH=/data/pastebin.db` in `.env` to write into the mounted volume.
 - **Auth**: JWT stored as httpOnly cookie **and** returned in response body as `token`. All API clients send it as `Authorization: Bearer <token>`. Both `requireAuth` and `optionalAuth` middlewares accept either cookie or Bearer header.
 - **Migrations**: Auto-run on startup from `src/db/migrations/*.sql` (tracked in `_migrations` table)
 - **Search**: SQLite FTS5 virtual table (`documents_fts`) with Porter stemmer, kept in sync via triggers

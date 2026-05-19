@@ -467,17 +467,27 @@ app.post("/:slug/handle-invites", requireAuth, (c) => {
     const alreadyMember = getMemberRole(group.id, invitee.id);
     if (alreadyMember) return c.json({ error: "User is already a member" }, 400);
 
-    try {
-      const result = db.prepare(
-        "INSERT INTO group_handle_invites (group_id, inviter_id, invitee_id, message) VALUES (?, ?, ?, ?)"
-      ).run(group.id, me.id, invitee.id, message ?? null);
-      return c.json({ invite_id: result.lastInsertRowid, invitee_handle: invitee.handle }, 201);
-    } catch (e: any) {
-      if (e.message?.includes("UNIQUE")) {
+    const existing = db
+      .query<{ id: number; status: string }, [number, number]>(
+        "SELECT id, status FROM group_handle_invites WHERE group_id = ? AND invitee_id = ?"
+      )
+      .get(group.id, invitee.id);
+
+    if (existing) {
+      if (existing.status === "pending") {
         return c.json({ error: "This user already has a pending invite to this group" }, 409);
       }
-      throw e;
+      // Previous invite was declined or accepted — reset it so it appears as a new invite
+      db.prepare(
+        "UPDATE group_handle_invites SET status='pending', inviter_id=?, message=?, read_at=NULL, created_at=unixepoch() WHERE id=?"
+      ).run(me.id, message ?? null, existing.id);
+      return c.json({ invite_id: existing.id, invitee_handle: invitee.handle }, 201);
     }
+
+    const result = db.prepare(
+      "INSERT INTO group_handle_invites (group_id, inviter_id, invitee_id, message) VALUES (?, ?, ?, ?)"
+    ).run(group.id, me.id, invitee.id, message ?? null);
+    return c.json({ invite_id: result.lastInsertRowid, invitee_handle: invitee.handle }, 201);
   });
 });
 
