@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { sendsApi } from "../../api/sends";
 import { groupsApi } from "../../api/groups";
+import { useToast } from "../ui/Toast";
 import { formatRelative } from "../../lib/utils";
 
 export function NotificationBell() {
@@ -14,6 +15,7 @@ export function NotificationBell() {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const qc = useQueryClient();
+  const { toast } = useToast();
 
   const { data: countData } = useQuery({
     queryKey: ["unread-count"],
@@ -52,7 +54,7 @@ export function NotificationBell() {
       qc.invalidateQueries({ queryKey: ["notifications"] });
     },
     onError: () => {
-      // Invite was cancelled or already responded to — clear stale notification
+      toast("This invitation has expired or was cancelled", "error");
       qc.invalidateQueries({ queryKey: ["unread-count"] });
       qc.invalidateQueries({ queryKey: ["notifications"] });
     },
