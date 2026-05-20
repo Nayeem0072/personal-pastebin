@@ -30,7 +30,6 @@ export default function EditDocPage() {
     title: "",
     content: "",
     language: "plaintext",
-    description: "",
     privacy: "public",
     groupId: null as number | null,
   });
@@ -42,7 +41,6 @@ export default function EditDocPage() {
         title: d.title,
         content: d.content,
         language: d.language,
-        description: d.description ?? "",
         privacy: d.privacy,
         groupId: d.group_id,
       });
@@ -55,7 +53,6 @@ export default function EditDocPage() {
         title: form.title,
         content: form.content,
         language: form.language,
-        description: form.description || undefined,
         privacy: form.privacy as any,
         group_id: form.privacy === "group" ? form.groupId ?? undefined : undefined,
       }),

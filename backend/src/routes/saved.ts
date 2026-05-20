@@ -100,7 +100,6 @@ app.get("/", requireAuth, (c) => {
     language:      string;
     privacy:       string;
     group_id:      number | null;
-    description:   string | null;
     created_at:    number;
     owner_handle:  string;
     owner_display: string | null;
@@ -115,7 +114,6 @@ app.get("/", requireAuth, (c) => {
          d.language,
          d.privacy,
          d.group_id,
-         d.description,
          d.created_at,
          u.handle       AS owner_handle,
          u.display_name AS owner_display

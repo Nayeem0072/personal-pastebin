@@ -7,6 +7,7 @@ import { DocEditor } from "../../components/document/DocEditor";
 import { Button } from "../../components/ui/Button";
 import { useToast } from "../../components/ui/Toast";
 import { useAuth } from "../../hooks/useAuth";
+import { getDefaultLanguage, getDefaultPrivacy, setDefaultLanguage, setDefaultPrivacy } from "../../lib/pasteDefaults";
 
 export default function NewDocPage() {
   const navigate = useNavigate();
@@ -17,9 +18,8 @@ export default function NewDocPage() {
   const [form, setForm] = useState({
     title: "",
     content: "",
-    language: "plaintext",
-    description: "",
-    privacy: "public",
+    language: getDefaultLanguage(),
+    privacy: getDefaultPrivacy(),
     groupId: null as number | null,
   });
 
@@ -34,7 +34,6 @@ export default function NewDocPage() {
         title: form.title || undefined,
         content: form.content,
         language: form.language,
-        description: form.description || undefined,
         privacy: form.privacy,
         group_id: form.privacy === "group" ? form.groupId ?? undefined : undefined,
       }),
@@ -69,6 +68,12 @@ export default function NewDocPage() {
           {...form}
           groupId={form.groupId}
           userGroups={groupsData?.groups ?? []}
+          showSetDefault
+          onSetDefault={() => {
+            setDefaultLanguage(form.language);
+            setDefaultPrivacy(form.privacy);
+            toast("Defaults saved", "success");
+          }}
           onChange={(f, v) => setForm((prev) => ({ ...prev, [f]: v }))}
         />
       </div>

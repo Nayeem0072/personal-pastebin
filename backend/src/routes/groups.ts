@@ -271,10 +271,10 @@ app.get("/:slug/documents", optionalAuth, (c) => {
 
   const docs = db
     .query<
-      { slug: string; title: string; language: string; description: string | null; privacy: string; owner_id: number; owner_handle: string; created_at: number },
+      { slug: string; title: string; language: string; privacy: string; owner_id: number; owner_handle: string; created_at: number },
       any[]
     >(
-      `SELECT d.slug, d.title, d.language, d.description, d.privacy, d.owner_id,
+      `SELECT d.slug, d.title, d.language, d.privacy, d.owner_id,
               u.handle as owner_handle, d.created_at
        FROM documents d JOIN users u ON d.owner_id = u.id
        WHERE d.group_id = ? AND d.privacy IN (${placeholders})

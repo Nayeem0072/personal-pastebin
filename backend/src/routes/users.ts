@@ -12,10 +12,10 @@ const getByHandle = db.query<AuthUser, [string]>(
 );
 
 const getPublicDocs = db.query<
-  { slug: string; title: string; language: string; description: string | null; created_at: number },
+  { slug: string; title: string; language: string; created_at: number },
   [number]
 >(
-  "SELECT slug, title, language, description, created_at FROM documents WHERE owner_id = ? AND privacy = 'public' ORDER BY created_at DESC LIMIT 50"
+  "SELECT slug, title, language, created_at FROM documents WHERE owner_id = ? AND privacy = 'public' ORDER BY created_at DESC LIMIT 50"
 );
 
 // GET /api/users/search?q= — prefix search on handle for autocomplete
@@ -66,10 +66,10 @@ app.get("/:handle", optionalAuth, (c) => {
   if (isSelf) {
     docs = db
       .query<
-        { slug: string; title: string; language: string; privacy: string; description: string | null; created_at: number },
+        { slug: string; title: string; language: string; privacy: string; created_at: number },
         [number]
       >(
-        "SELECT slug, title, language, privacy, description, created_at FROM documents WHERE owner_id = ? ORDER BY created_at DESC LIMIT 50"
+        "SELECT slug, title, language, privacy, created_at FROM documents WHERE owner_id = ? ORDER BY created_at DESC LIMIT 50"
       )
       .all(user.id);
   } else {

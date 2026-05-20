@@ -38,7 +38,6 @@ function buildDb() {
       title    TEXT NOT NULL DEFAULT 'Untitled',
       content  TEXT NOT NULL,
       language TEXT NOT NULL DEFAULT 'plaintext',
-      description TEXT,
       highlighted_html TEXT,
       privacy  TEXT NOT NULL DEFAULT 'public',
       group_id INTEGER REFERENCES groups(id),
