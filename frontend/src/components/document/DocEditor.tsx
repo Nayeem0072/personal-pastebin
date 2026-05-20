@@ -1,23 +1,36 @@
+import { useState } from "react";
 import { Textarea } from "../ui/Textarea";
 import { Select } from "../ui/Select";
 import { Input } from "../ui/Input";
 import { SUPPORTED_LANGUAGES, PRIVACY_OPTIONS } from "../../lib/constants";
+import { setDefaultLanguage, setDefaultPrivacy } from "../../lib/pasteDefaults";
 import type { Group } from "../../api/groups";
 
 interface DocEditorProps {
   title: string;
   content: string;
   language: string;
-  description: string;
   privacy: string;
   groupId: number | null;
   userGroups: Group[];
+  showSetDefault?: boolean;
+  onSetDefault?: () => void;
   onChange: (field: string, value: string | number | null) => void;
 }
 
 export function DocEditor({
-  title, content, language, description, privacy, groupId, userGroups, onChange,
+  title, content, language, privacy, groupId, userGroups, showSetDefault, onSetDefault, onChange,
 }: DocEditorProps) {
+  const [defaultSaved, setDefaultSaved] = useState(false);
+
+  function handleSetDefault() {
+    setDefaultLanguage(language);
+    setDefaultPrivacy(privacy);
+    setDefaultSaved(true);
+    setTimeout(() => setDefaultSaved(false), 2000);
+    onSetDefault?.();
+  }
+
   return (
     <div className="space-y-4">
       <Input
@@ -35,7 +48,7 @@ export function DocEditor({
         required
       />
 
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap gap-3 items-center">
         <div className="w-40">
           <Select
             value={language}
@@ -62,13 +75,23 @@ export function DocEditor({
             />
           </div>
         )}
-        <div className="flex-1 min-w-[200px]">
-          <Input
-            placeholder="Add a description..."
-            value={description}
-            onChange={(e) => onChange("description", e.target.value)}
-          />
-        </div>
+        {showSetDefault && (
+          <button
+            type="button"
+            onClick={handleSetDefault}
+            style={{
+              background: "none",
+              border: "none",
+              padding: "0 4px",
+              cursor: "pointer",
+              fontSize: 12,
+              color: defaultSaved ? "#4ade80" : "#555568",
+              transition: "color 0.2s",
+            }}
+          >
+            {defaultSaved ? "✓ Defaults saved" : "Set as default"}
+          </button>
+        )}
       </div>
     </div>
   );
