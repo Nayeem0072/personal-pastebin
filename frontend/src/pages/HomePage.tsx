@@ -1,32 +1,37 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { searchApi } from "../api/search";
+import { trendingApi } from "../api/trending";
 import { useSearch } from "../hooks/useSearch";
 import { useAuth } from "../hooks/useAuth";
 import { DocCard } from "../components/document/DocCard";
 import { Button } from "../components/ui/Button";
 
-function RecentPublicDocs() {
+function TrendingPublicDocs() {
   const { data } = useQuery({
-    queryKey: ["recent-docs"],
+    queryKey: ["trending"],
     queryFn: () =>
-      searchApi.search({ q: "the a in", page: 1, limit: 9 }).catch(() => ({
-        results: [], total: 0, page: 1, limit: 9, has_more: false,
-      })),
-    staleTime: 60_000,
+      trendingApi.list(9, 7).catch(() => ({ results: [], window_days: 7 })),
+    staleTime: 5 * 60_000,
   });
 
   if (!data?.results.length) return null;
 
   return (
     <section>
-      <h2 style={{ fontSize: 11, fontWeight: 600, color: "var(--color-ink-3)", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 14 }}>
-        Recent Pastes
-      </h2>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
+        <h2 style={{ fontSize: 11, fontWeight: 600, color: "var(--color-ink-3)", textTransform: "uppercase", letterSpacing: "0.1em", margin: 0 }}>
+          Trending this week
+        </h2>
+        <Link to="/trending" style={{ fontSize: 12, color: "var(--color-blue)", textDecoration: "none" }}>
+          See all →
+        </Link>
+      </div>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 12 }}>
         {data.results.map((r) => (
-          <DocCard key={r.slug} {...r} owner_handle={r.owner_handle} />
+          <DocCard key={r.slug} slug={r.slug} title={r.title} language={r.language}
+            privacy={r.privacy} created_at={r.created_at} owner_handle={r.owner_handle}
+            weekly_views={r.weekly_views} />
         ))}
       </div>
     </section>
@@ -118,7 +123,7 @@ export default function HomePage() {
         </section>
       )}
 
-      {!q && <RecentPublicDocs />}
+      {!q && <TrendingPublicDocs />}
 
     </div>
   );
