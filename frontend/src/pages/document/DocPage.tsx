@@ -5,7 +5,6 @@ import { docsApi } from "../../api/documents";
 import { savedApi } from "../../api/saved";
 import { useAuth } from "../../hooks/useAuth";
 import { DocViewer } from "../../components/document/DocViewer";
-import { SharePanel } from "../../components/document/SharePanel";
 import { SendPanel } from "../../components/document/SendPanel";
 import { Badge, PrivacyBadge } from "../../components/ui/Badge";
 import { Button } from "../../components/ui/Button";
@@ -20,8 +19,7 @@ export default function DocPage() {
   const navigate = useNavigate();
   const qc = useQueryClient();
   const { toast } = useToast();
-  const [shareOpen, setShareOpen] = useState(false);
-  const [sendOpen, setSendOpen] = useState(false);
+const [sendOpen, setSendOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -159,13 +157,7 @@ export default function DocPage() {
                 Edit
               </Button>
             </Link>
-            {doc.privacy === "private" && (
-              <Button variant="ghost" size="sm" onClick={() => setShareOpen(true)}>
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="9.5" cy="2.5" r="1.5" stroke="currentColor" strokeWidth="1.1"/><circle cx="9.5" cy="9.5" r="1.5" stroke="currentColor" strokeWidth="1.1"/><circle cx="2.5" cy="6" r="1.5" stroke="currentColor" strokeWidth="1.1"/><path d="M4 6l4-2.5M4 6l4 2.5" stroke="currentColor" strokeWidth="1.1"/></svg>
-                Share
-              </Button>
-            )}
-            <Button variant="danger" size="sm" onClick={() => setDeleteOpen(true)}>
+<Button variant="danger" size="sm" onClick={() => setDeleteOpen(true)}>
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1.5 3h9M4 3V2a.5.5 0 01.5-.5h3A.5.5 0 018 2v1m1.5 0L9 10a.5.5 0 01-.5.5h-5A.5.5 0 013 10L2.5 3" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round"/></svg>
               Delete
             </Button>
@@ -199,12 +191,7 @@ export default function DocPage() {
         <SendPanel slug={slug!} privacy={doc.privacy} />
       </Modal>
 
-      {/* Share modal */}
-      <Modal open={shareOpen} onClose={() => setShareOpen(false)} title="Share Paste">
-        <SharePanel slug={slug!} />
-      </Modal>
-
-      {/* Delete confirmation */}
+{/* Delete confirmation */}
       <Modal open={deleteOpen} onClose={() => setDeleteOpen(false)} title="Delete paste?">
         <p className="text-[13px] text-ink-3 mb-5 leading-relaxed">
           <strong className="text-ink">"{doc.title}"</strong> will be permanently deleted. This cannot be undone.
