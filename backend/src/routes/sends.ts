@@ -71,7 +71,6 @@ app.get("/inbox", requireAuth, (c) => {
         title: string;
         language: string;
         privacy: string;
-        description: string | null;
         sender_handle: string;
         sender_display_name: string | null;
       },
@@ -86,7 +85,6 @@ app.get("/inbox", requireAuth, (c) => {
          d.title,
          d.language,
          d.privacy,
-         d.description,
          u.handle     AS sender_handle,
          u.display_name AS sender_display_name
        FROM document_sends ds

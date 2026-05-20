@@ -6,7 +6,6 @@ export interface Document {
   title: string;
   content: string;
   language: string;
-  description: string | null;
   highlighted_html: string | null;
   privacy: "public" | "group" | "private";
   group_id: number | null;
@@ -20,7 +19,6 @@ export interface DocSummary {
   title: string;
   language: string;
   privacy: string;
-  description: string | null;
   created_at: number;
   updated_at?: number;
 }
@@ -36,7 +34,6 @@ export const docsApi = {
     title?: string;
     content: string;
     language?: string;
-    description?: string;
     privacy?: string;
     group_id?: number;
   }) =>
@@ -52,7 +49,7 @@ export const docsApi = {
 
   update: (
     slug: string,
-    data: Partial<Pick<Document, "title" | "content" | "language" | "description" | "privacy" | "group_id">>
+    data: Partial<Pick<Document, "title" | "content" | "language" | "privacy" | "group_id">>
   ) =>
     apiFetch<{ doc: Document }>(`/api/documents/${slug}`, {
       method: "PATCH",

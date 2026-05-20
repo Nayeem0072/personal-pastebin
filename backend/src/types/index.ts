@@ -14,7 +14,6 @@ export interface Document {
   title: string;
   content: string;
   language: string;
-  description: string | null;
   highlighted_html: string | null;
   privacy: "public" | "group" | "private";
   group_id: number | null;

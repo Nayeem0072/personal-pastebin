@@ -14,7 +14,7 @@ const app = new Hono<{ Variables: Vars }>();
 app.post("/", requireAuth, async (c) => {
   const me = c.var.user!;
   const body = await c.req.json();
-  const { title, content, language = "plaintext", description, privacy = "public", group_id } = body ?? {};
+  const { title, content, language = "plaintext", privacy = "public", group_id } = body ?? {};
 
   if (!content) return c.json({ error: "content is required" }, 400);
   if (!["public", "group", "private"].includes(privacy)) {
@@ -35,9 +35,9 @@ app.post("/", requireAuth, async (c) => {
   const highlighted_html = await highlightCode(content, language);
 
   db.prepare(
-    `INSERT INTO documents (slug, title, content, language, description, highlighted_html, privacy, group_id, owner_id)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
-  ).run(slug, title ?? "Untitled", content, language, description ?? null, highlighted_html, privacy, group_id ?? null, me.id);
+    `INSERT INTO documents (slug, title, content, language, highlighted_html, privacy, group_id, owner_id)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+  ).run(slug, title ?? "Untitled", content, language, highlighted_html, privacy, group_id ?? null, me.id);
 
   return c.json({ slug, title: title ?? "Untitled", language, privacy, created_at: Math.floor(Date.now() / 1000) }, 201);
 });
@@ -51,10 +51,10 @@ app.get("/", requireAuth, (c) => {
 
   const docs = db
     .query<
-      { slug: string; title: string; language: string; privacy: string; group_id: number | null; description: string | null; created_at: number; updated_at: number },
+      { slug: string; title: string; language: string; privacy: string; group_id: number | null; created_at: number; updated_at: number },
       [number, number, number]
     >(
-      "SELECT slug, title, language, privacy, group_id, description, created_at, updated_at FROM documents WHERE owner_id = ? ORDER BY created_at DESC LIMIT ? OFFSET ?"
+      "SELECT slug, title, language, privacy, group_id, created_at, updated_at FROM documents WHERE owner_id = ? ORDER BY created_at DESC LIMIT ? OFFSET ?"
     )
     .all(me.id, limit, offset);
 
@@ -98,13 +98,12 @@ app.patch("/:slug", requireAuth, async (c) => {
   if (doc.owner_id !== me.id) return c.json({ error: "Forbidden" }, 403);
 
   const body = await c.req.json();
-  const { title, content, language, description, privacy, group_id } = body ?? {};
+  const { title, content, language, privacy, group_id } = body ?? {};
 
   const updates: string[] = [];
   const values: (string | number | null)[] = [];
 
   if (title !== undefined) { updates.push("title = ?"); values.push(title); }
-  if (description !== undefined) { updates.push("description = ?"); values.push(description); }
   if (privacy !== undefined) {
     if (!["public", "group", "private"].includes(privacy)) return c.json({ error: "Invalid privacy" }, 400);
     updates.push("privacy = ?");
