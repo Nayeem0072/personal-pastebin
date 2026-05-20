@@ -29,6 +29,7 @@
         "@codemirror/commands": "^6.10.3",
         "@codemirror/language": "^6.12.3",
         "@codemirror/view": "^6.43.0",
+        "@replit/codemirror-vim": "^6.3.0",
         "@tanstack/react-query": "^5.59.0",
         "@uiw/codemirror-extensions-langs": "^4.25.9",
         "@uiw/codemirror-theme-github": "^4.25.9",
@@ -260,6 +261,8 @@
     "@replit/codemirror-lang-solidity": ["@replit/codemirror-lang-solidity@6.0.2", "", { "dependencies": { "@lezer/highlight": "^1.2.0" }, "peerDependencies": { "@codemirror/language": "^6.0.0" } }, "sha512-/dpTVH338KFV6SaDYYSadkB4bI/0B0QRF/bkt1XS3t3QtyR49mn6+2k0OUQhvt2ZSO7kt10J+OPilRAtgbmX0w=="],
 
     "@replit/codemirror-lang-svelte": ["@replit/codemirror-lang-svelte@6.0.0", "", { "peerDependencies": { "@codemirror/autocomplete": "^6.0.0", "@codemirror/lang-css": "^6.0.1", "@codemirror/lang-html": "^6.2.0", "@codemirror/lang-javascript": "^6.1.1", "@codemirror/language": "^6.0.0", "@codemirror/state": "^6.0.0", "@codemirror/view": "^6.0.0", "@lezer/common": "^1.0.0", "@lezer/highlight": "^1.0.0", "@lezer/javascript": "^1.2.0", "@lezer/lr": "^1.0.0" } }, "sha512-U2OqqgMM6jKelL0GNWbAmqlu1S078zZNoBqlJBW+retTc5M4Mha6/Y2cf4SVg6ddgloJvmcSpt4hHrVoM4ePRA=="],
+
+    "@replit/codemirror-vim": ["@replit/codemirror-vim@6.3.0", "", { "peerDependencies": { "@codemirror/commands": "6.x.x", "@codemirror/language": "6.x.x", "@codemirror/search": "6.x.x", "@codemirror/state": "6.x.x", "@codemirror/view": "6.x.x" } }, "sha512-aTx931ULAMuJx6xLf7KQDOL7CxD+Sa05FktTDrtLaSy53uj01ll3Zf17JdKsriER248oS55GBzg0CfCTjEneAQ=="],
 
     "@rolldown/pluginutils": ["@rolldown/pluginutils@1.0.0-beta.27", "", {}, "sha512-+d0F4MKMCbeVUJwG96uQ4SgAznZNSq93I3V+9NHA4OpvqG8mRCpGdKmK8l/dl02h2CCDHwW2FqilnTyDcAnqjA=="],
 

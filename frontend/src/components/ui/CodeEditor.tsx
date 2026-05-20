@@ -1,10 +1,11 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import CodeMirror from "@uiw/react-codemirror";
 import { loadLanguage } from "@uiw/codemirror-extensions-langs";
 import { githubDark, githubLight } from "@uiw/codemirror-theme-github";
 import { EditorView, keymap } from "@codemirror/view";
 import { indentWithTab } from "@codemirror/commands";
 import { bracketMatching } from "@codemirror/language";
+import { vim } from "@replit/codemirror-vim";
 
 interface CodeEditorProps {
   value: string;
@@ -12,6 +13,7 @@ interface CodeEditorProps {
   language: string;
   placeholder?: string;
   minHeight?: string;
+  onPaste?: (text: string) => void;
 }
 
 const LANG_MAP: Record<string, string | null> = {
@@ -55,18 +57,40 @@ const fontTheme = EditorView.theme({
   ".cm-placeholder": { color: "var(--color-ink-3)" },
 });
 
-export function CodeEditor({ value, onChange, language, placeholder, minHeight }: CodeEditorProps) {
+export function CodeEditor({ value, onChange, language, placeholder, minHeight, onPaste }: CodeEditorProps) {
   const [isDark, setIsDark] = useState(
     () => document.documentElement.getAttribute("data-theme") !== "light"
   );
+  const [vimMode, setVimMode] = useState(
+    () => localStorage.getItem("clippr-vim-mode") === "true"
+  );
 
   useEffect(() => {
-    const observer = new MutationObserver(() => {
+    const themeObserver = new MutationObserver(() => {
       setIsDark(document.documentElement.getAttribute("data-theme") !== "light");
     });
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
-    return () => observer.disconnect();
+    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+
+    const storageHandler = (e: StorageEvent) => {
+      if (e.key === "clippr-vim-mode") setVimMode(e.newValue === "true");
+    };
+    window.addEventListener("storage", storageHandler);
+
+    return () => {
+      themeObserver.disconnect();
+      window.removeEventListener("storage", storageHandler);
+    };
   }, []);
+
+  const onPasteRef = useRef(onPaste);
+  useEffect(() => { onPasteRef.current = onPaste; });
+
+  const pasteExt = useMemo(() => EditorView.domEventHandlers({
+    paste(event) {
+      const text = event.clipboardData?.getData("text/plain") ?? "";
+      if (text) onPasteRef.current?.(text);
+    },
+  }), []);
 
   const extensions = useMemo(() => {
     const langKey = LANG_MAP[language] ?? null;
@@ -74,11 +98,11 @@ export function CodeEditor({ value, onChange, language, placeholder, minHeight }
     return [
       fontTheme,
       EditorView.lineWrapping,
-      keymap.of([indentWithTab]),
       bracketMatching(),
+      ...(vimMode ? [vim()] : [keymap.of([indentWithTab])]),
       ...(langExt ? [langExt] : []),
     ];
-  }, [language]);
+  }, [language, vimMode]);
 
   return (
     <div className="code-editor-wrapper">
@@ -86,7 +110,7 @@ export function CodeEditor({ value, onChange, language, placeholder, minHeight }
         value={value}
         onChange={onChange}
         theme={isDark ? githubDark : githubLight}
-        extensions={extensions}
+        extensions={[...extensions, pasteExt]}
         placeholder={placeholder}
         style={{ minHeight: minHeight ?? "260px" }}
         basicSetup={{ lineNumbers: false, foldGutter: false }}

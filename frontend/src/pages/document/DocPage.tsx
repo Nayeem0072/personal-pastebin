@@ -22,6 +22,7 @@ export default function DocPage() {
 const [sendOpen, setSendOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [copiedContent, setCopiedContent] = useState(false);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["doc", slug],
@@ -84,6 +85,12 @@ const [sendOpen, setSendOpen] = useState(false);
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const copyContent = () => {
+    navigator.clipboard.writeText(doc?.content ?? "");
+    setCopiedContent(true);
+    setTimeout(() => setCopiedContent(false), 2000);
+  };
+
   return (
     <div className="max-w-4xl mx-auto space-y-5">
       {/* Header */}
@@ -120,6 +127,14 @@ const [sendOpen, setSendOpen] = useState(false);
             <><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/></svg> Copied</>
           ) : (
             <><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="3" width="7" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.2"/><path d="M4 3V2.5A1.5 1.5 0 015.5 1h3A1.5 1.5 0 0110 2.5v6A1.5 1.5 0 018.5 10H8" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></svg> Copy Link</>
+          )}
+        </Button>
+
+        <Button variant="ghost" size="sm" onClick={copyContent}>
+          {copiedContent ? (
+            <><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/></svg> Copied</>
+          ) : (
+            <><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 2h6a1 1 0 011 1v6a1 1 0 01-1 1H2a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="currentColor" strokeWidth="1.2"/><path d="M4 2V1.5A.5.5 0 014.5 1h5a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></svg> Copy</>
           )}
         </Button>
 

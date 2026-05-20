@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { CodeEditor } from "../ui/CodeEditor";
+import { detectLanguage } from "../../lib/detectLanguage";
 import { Select } from "../ui/Select";
 import { Input } from "../ui/Input";
 import { SUPPORTED_LANGUAGES, PRIVACY_OPTIONS } from "../../lib/constants";
@@ -46,6 +47,12 @@ export function DocEditor({
         language={language}
         placeholder="// Paste your code, config, or text here..."
         minHeight="260px"
+        onPaste={(text) => {
+          if (language === "plaintext") {
+            const detected = detectLanguage(text);
+            if (detected) onChange("language", detected);
+          }
+        }}
       />
 
       <div className="flex flex-wrap gap-3 items-center">
