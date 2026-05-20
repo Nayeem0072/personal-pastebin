@@ -65,6 +65,17 @@ export default function EditDocPage() {
     onError: (e: any) => toast(e.message, "error"),
   });
 
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "s") {
+        e.preventDefault();
+        if (!update.isPending) update.mutate();
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [update.isPending]);
+
   if (isLoading) return <PageLoader />;
   if (!data || data.doc.owner_id !== user?.id) {
     navigate(`/docs/${slug}`);

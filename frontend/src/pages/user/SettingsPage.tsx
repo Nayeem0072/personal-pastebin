@@ -15,6 +15,7 @@ export default function SettingsPage() {
 
   const [profile, setProfile] = useState({ display_name: "", bio: "", avatar_url: "" });
   const [pw, setPw] = useState({ current_password: "", new_password: "" });
+  const [vimMode, setVimMode] = useState(() => localStorage.getItem("clippr-vim-mode") === "true");
 
   useEffect(() => {
     if (user) {
@@ -89,6 +90,28 @@ export default function SettingsPage() {
             </Button>
           </div>
         </div>
+      </div>
+
+      {/* Editor preferences */}
+      <div className="pp-card" style={{ padding: 24 }}>
+        <h2 style={{ fontSize: 14, fontWeight: 600, color: "var(--color-ink)", margin: "0 0 20px", paddingBottom: 12, borderBottom: "1px solid var(--color-border)" }}>
+          Editor
+        </h2>
+        <label style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }}>
+          <input
+            type="checkbox"
+            checked={vimMode}
+            onChange={(e) => {
+              setVimMode(e.target.checked);
+              localStorage.setItem("clippr-vim-mode", e.target.checked ? "true" : "false");
+              window.dispatchEvent(new StorageEvent("storage", { key: "clippr-vim-mode", newValue: e.target.checked ? "true" : "false" }));
+            }}
+          />
+          <span style={{ fontSize: 14, color: "var(--color-ink)" }}>Vim keybindings</span>
+        </label>
+        <p style={{ fontSize: 12, color: "var(--color-ink-3)", marginTop: 6, marginLeft: 26 }}>
+          Takes effect immediately in the editor.
+        </p>
       </div>
 
       {/* Danger zone */}

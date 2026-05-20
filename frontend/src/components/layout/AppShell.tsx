@@ -1,7 +1,9 @@
+import { useState, useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { Sidebar, MobileNav, MobileTopBar } from "./Sidebar";
 import { TopNav } from "./TopNav";
 import { ToastProvider } from "../ui/Toast";
+import { CommandPalette } from "../ui/CommandPalette";
 import { useAuth } from "../../hooks/useAuth";
 
 function AnimatedOutlet() {
@@ -14,7 +16,19 @@ function AnimatedOutlet() {
 }
 
 export function AppShell() {
-  const { isLoggedIn, isLoading } = useAuth();
+  const { isLoggedIn, isLoading, user } = useAuth();
+  const [paletteOpen, setPaletteOpen] = useState(false);
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "k") {
+        e.preventDefault();
+        setPaletteOpen(prev => !prev);
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
 
   if (isLoading) {
     return (
@@ -44,6 +58,11 @@ export function AppShell() {
 
   return (
     <ToastProvider>
+      <CommandPalette
+        open={paletteOpen}
+        onClose={() => setPaletteOpen(false)}
+        userHandle={user?.handle}
+      />
       <div className="app-layout">
         <Sidebar />
         <div className="app-content">
