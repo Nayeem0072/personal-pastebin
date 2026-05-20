@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Textarea } from "../ui/Textarea";
+import { CodeEditor } from "../ui/CodeEditor";
 import { Select } from "../ui/Select";
 import { Input } from "../ui/Input";
 import { SUPPORTED_LANGUAGES, PRIVACY_OPTIONS } from "../../lib/constants";
@@ -40,12 +40,12 @@ export function DocEditor({
         className="text-[15px] font-medium bg-transparent border-transparent hover:border-border focus:!border-blue/40 px-0 rounded-none border-b"
       />
 
-      <Textarea
+      <CodeEditor
         value={content}
-        onChange={(e) => onChange("content", e.target.value)}
+        onChange={(v) => onChange("content", v)}
+        language={language}
         placeholder="// Paste your code, config, or text here..."
-        className="min-h-[260px] sm:min-h-[440px] text-[13px] leading-7"
-        required
+        minHeight="260px"
       />
 
       <div className="flex flex-wrap gap-3 items-center">
