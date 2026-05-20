@@ -44,14 +44,14 @@ export default function OrgInvitesPage() {
   return (
     <div style={{ maxWidth: 700, margin: "0 auto", display: "flex", flexDirection: "column", gap: 24 }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <h1 style={{ fontSize: 22, fontWeight: 700, color: "#EEEEF5", margin: 0 }}>Invite Links</h1>
+        <h1 style={{ fontSize: 22, fontWeight: 700, color: "var(--color-ink)", margin: 0 }}>Invite Links</h1>
         <Button onClick={() => create.mutate()} loading={create.isPending}>
           + Create Invite
         </Button>
       </div>
 
       {data?.invites.length === 0 ? (
-        <p style={{ color: "#555568", fontSize: 14 }}>No active invite links. Create one to invite members.</p>
+        <p style={{ color: "var(--color-ink-3)", fontSize: 14 }}>No active invite links. Create one to invite members.</p>
       ) : (
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           {data?.invites.map((inv) => (
@@ -61,7 +61,7 @@ export default function OrgInvitesPage() {
                   <code style={{ fontSize: 13, fontFamily: "monospace", color: "#00C4FF", wordBreak: "break-all", display: "block" }}>
                     {window.location.origin}/join/{inv.code}
                   </code>
-                  <div style={{ display: "flex", gap: 12, fontSize: 12, color: "#555568", marginTop: 6 }}>
+                  <div style={{ display: "flex", gap: 12, fontSize: 12, color: "var(--color-ink-3)", marginTop: 6 }}>
                     <span>Used: {inv.use_count}{inv.max_uses ? `/${inv.max_uses}` : ""}</span>
                     {inv.expires_at && <span>Expires: {formatDate(inv.expires_at)}</span>}
                     <span>By @{inv.created_by_handle}</span>

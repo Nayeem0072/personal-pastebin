@@ -23,7 +23,7 @@ export default function ProfilePage() {
   if (isLoading) return <PageLoader />;
   if (error) return (
     <div style={{ textAlign: "center", padding: "64px 24px" }}>
-      <p style={{ color: "#555568", fontSize: 14 }}>{(error as any).message}</p>
+      <p style={{ color: "var(--color-ink-3)", fontSize: 14 }}>{(error as any).message}</p>
     </div>
   );
 
@@ -52,7 +52,7 @@ export default function ProfilePage() {
         </div>
         <div style={{ flex: 1 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 4 }}>
-            <h1 style={{ fontSize: 22, fontWeight: 700, color: "#EEEEF5", margin: 0 }}>
+            <h1 style={{ fontSize: 22, fontWeight: 700, color: "var(--color-ink)", margin: 0 }}>
               {(user as any).display_name ?? (user as any).handle}
             </h1>
             {isSelf && (
@@ -61,13 +61,13 @@ export default function ProfilePage() {
               </Link>
             )}
           </div>
-          <p style={{ fontSize: 13, color: "#555568", margin: "0 0 6px", fontFamily: "monospace" }}>
+          <p style={{ fontSize: 13, color: "var(--color-ink-3)", margin: "0 0 6px", fontFamily: "monospace" }}>
             @{(user as any).handle}
           </p>
           {(user as any).bio && (
-            <p style={{ fontSize: 14, color: "#8A8AA2", margin: "0 0 6px" }}>{(user as any).bio}</p>
+            <p style={{ fontSize: 14, color: "var(--color-ink-2)", margin: "0 0 6px" }}>{(user as any).bio}</p>
           )}
-          <p style={{ fontSize: 12, color: "#555568", margin: 0 }}>
+          <p style={{ fontSize: 12, color: "var(--color-ink-3)", margin: 0 }}>
             Joined {formatDate((user as any).created_at)}
           </p>
         </div>
@@ -76,8 +76,8 @@ export default function ProfilePage() {
       {/* Docs */}
       <section>
         <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 16 }}>
-          <h2 style={{ fontSize: 11, fontWeight: 600, color: "#555568", textTransform: "uppercase", letterSpacing: "0.1em", margin: 0 }}>
-            Pastes {docs.length > 0 && <span style={{ color: "#38383F", fontWeight: 400, fontSize: 11 }}>({filterQ ? `${filteredDocs.length}/` : ""}{docs.length})</span>}
+          <h2 style={{ fontSize: 11, fontWeight: 600, color: "var(--color-ink-3)", textTransform: "uppercase", letterSpacing: "0.1em", margin: 0 }}>
+            Pastes {docs.length > 0 && <span style={{ color: "var(--color-border)", fontWeight: 400, fontSize: 11 }}>({filterQ ? `${filteredDocs.length}/` : ""}{docs.length})</span>}
           </h2>
           {isSelf && docs.length > 0 && (
             <Input

@@ -12,7 +12,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
     return (
       <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
         {label && (
-          <label htmlFor={inputId} style={{ fontSize: 13, fontWeight: 500, color: "#8A8AA2" }}>
+          <label htmlFor={inputId} style={{ fontSize: 13, fontWeight: 500, color: "var(--color-ink-2)" }}>
             {label}
           </label>
         )}
@@ -25,14 +25,14 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             {...props}
           >
             {options.map((opt) => (
-              <option key={opt.value} value={opt.value} style={{ background: "#28282F", color: "#EEEEF5" }}>
+              <option key={opt.value} value={opt.value}>
                 {opt.label}
               </option>
             ))}
           </select>
           <div style={{
             position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)",
-            pointerEvents: "none", color: "#555568",
+            pointerEvents: "none", color: "var(--color-ink-3)",
           }}>
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
               <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>

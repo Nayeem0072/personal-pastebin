@@ -1,5 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
+import { useTheme } from "../../hooks/useTheme";
 import { useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { sendsApi } from "../../api/sends";
@@ -68,13 +69,57 @@ const SharedIcon = () => (
   </svg>
 );
 
+const SunIcon = () => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+    <circle cx="12" cy="12" r="4"/>
+    <path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+  </svg>
+);
+
+const MoonIcon = () => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+  </svg>
+);
+
+function ThemeToggle() {
+  const { theme, toggleTheme } = useTheme();
+  return (
+    <button
+      onClick={toggleTheme}
+      title={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
+      style={{
+        background: "none",
+        border: "none",
+        cursor: "pointer",
+        color: "var(--color-ink-3)",
+        padding: 6,
+        borderRadius: 8,
+        transition: "color 150ms, background 150ms",
+        display: "flex",
+        alignItems: "center",
+      }}
+      onMouseOver={e => {
+        e.currentTarget.style.color = "var(--color-ink)";
+        e.currentTarget.style.background = "var(--color-hover-overlay)";
+      }}
+      onMouseOut={e => {
+        e.currentTarget.style.color = "var(--color-ink-3)";
+        e.currentTarget.style.background = "none";
+      }}
+    >
+      {theme === "dark" ? <SunIcon /> : <MoonIcon />}
+    </button>
+  );
+}
+
 export function Sidebar() {
   const { user, logoutAsync } = useAuth();
   const navigate = useNavigate();
 
   return (
     <aside className="app-sidebar" style={{ flexDirection: "column", padding: "20px 12px" }}>
-      {/* Logo + notification bell */}
+      {/* Logo + theme toggle + notification bell */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 28, padding: "0 2px" }}>
         <Link to="/new" style={{
           display: "flex", alignItems: "center", gap: 10,
@@ -92,15 +137,18 @@ export function Sidebar() {
               <path d="M5 7h6M5 9.5h6M5 12h4" stroke="rgba(0,128,255,0.7)" strokeWidth="1.1" strokeLinecap="round"/>
             </svg>
           </div>
-          <span style={{ fontSize: 15, fontWeight: 700, color: "#EEEEF5", letterSpacing: "-0.3px" }}>
+          <span style={{ fontSize: 15, fontWeight: 700, color: "var(--color-ink)", letterSpacing: "-0.3px" }}>
             Clippr
           </span>
         </Link>
-        <NotificationBell />
+        <div style={{ display: "flex", alignItems: "center", gap: 2 }}>
+          <ThemeToggle />
+          <NotificationBell />
+        </div>
       </div>
 
       {/* Nav section */}
-      <p style={{ fontSize: 11, fontWeight: 600, color: "#555568", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 6, paddingLeft: 14 }}>
+      <p style={{ fontSize: 11, fontWeight: 600, color: "var(--color-ink-3)", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 6, paddingLeft: 14 }}>
         Menu
       </p>
       <nav style={{ display: "flex", flexDirection: "column", gap: 2, marginBottom: 24 }}>
@@ -111,7 +159,7 @@ export function Sidebar() {
         <NavLink to="/saved" label="Saved" icon={<SavedIcon />} />
       </nav>
 
-      <p style={{ fontSize: 11, fontWeight: 600, color: "#555568", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 6, paddingLeft: 14 }}>
+      <p style={{ fontSize: 11, fontWeight: 600, color: "var(--color-ink-3)", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 6, paddingLeft: 14 }}>
         Account
       </p>
       <nav style={{ display: "flex", flexDirection: "column", gap: 2 }}>
@@ -122,8 +170,8 @@ export function Sidebar() {
       {/* Bottom: user card */}
       <div style={{ marginTop: "auto" }}>
         <div style={{
-          background: "rgba(255,255,255,0.04)",
-          border: "1px solid #38383F",
+          background: "var(--color-hover-overlay)",
+          border: "1px solid var(--color-border)",
           borderRadius: 12,
           padding: "10px 12px",
           display: "flex",
@@ -139,21 +187,21 @@ export function Sidebar() {
             {(user?.handle ?? "?")[0].toUpperCase()}
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <p style={{ fontSize: 13, fontWeight: 600, color: "#EEEEF5", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+            <p style={{ fontSize: 13, fontWeight: 600, color: "var(--color-ink)", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
               {user?.display_name ?? user?.handle}
             </p>
-            <p style={{ fontSize: 11, color: "#555568", margin: 0 }}>@{user?.handle}</p>
+            <p style={{ fontSize: 11, color: "var(--color-ink-3)", margin: 0 }}>@{user?.handle}</p>
           </div>
           <button
             onClick={async () => { await logoutAsync(); navigate("/"); }}
             title="Sign out"
             style={{
               background: "none", border: "none", cursor: "pointer",
-              color: "#555568", padding: 4, borderRadius: 6, transition: "color 150ms",
+              color: "var(--color-ink-3)", padding: 4, borderRadius: 6, transition: "color 150ms",
               display: "flex", alignItems: "center",
             }}
             onMouseOver={e => (e.currentTarget.style.color = "#f87171")}
-            onMouseOut={e => (e.currentTarget.style.color = "#555568")}
+            onMouseOut={e => (e.currentTarget.style.color = "var(--color-ink-3)")}
           >
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
               <path d="M9.5 4.5l2.5 2.5-2.5 2.5M12 7H5.5M7 2H2.5A.5.5 0 002 2.5v9a.5.5 0 00.5.5H7"
@@ -181,9 +229,12 @@ export function MobileTopBar() {
             <path d="M5 7h6M5 9.5h6M5 12h4" stroke="rgba(0,128,255,0.7)" strokeWidth="1.1" strokeLinecap="round"/>
           </svg>
         </div>
-        <span style={{ fontSize: 15, fontWeight: 700, color: "#EEEEF5", letterSpacing: "-0.3px" }}>Clippr</span>
+        <span style={{ fontSize: 15, fontWeight: 700, color: "var(--color-ink)", letterSpacing: "-0.3px" }}>Clippr</span>
       </Link>
-      <NotificationBell />
+      <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+        <ThemeToggle />
+        <NotificationBell />
+      </div>
     </div>
   );
 }
@@ -223,7 +274,7 @@ export function MobileNav() {
           {unreadCount > 0 && (
             <span style={{
               position: "absolute", top: -3, right: -4,
-              width: 7, height: 7, borderRadius: "50%", background: "#00C4FF",
+              width: 7, height: 7, borderRadius: "50%", background: "var(--color-blue)",
             }} />
           )}
         </div>

@@ -26,11 +26,11 @@ export default function SearchPage() {
 
   return (
     <div style={{ maxWidth: 900, margin: "0 auto", display: "flex", flexDirection: "column", gap: 24 }}>
-      <h1 style={{ fontSize: 22, fontWeight: 700, color: "#EEEEF5", margin: 0 }}>Explore Pastes</h1>
+      <h1 style={{ fontSize: 22, fontWeight: 700, color: "var(--color-ink)", margin: 0 }}>Explore Pastes</h1>
 
       <form onSubmit={handleSearch} style={{ display: "flex", gap: 8 }}>
         <div style={{ flex: 1, position: "relative" }}>
-          <svg style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "#555568", width: 16, height: 16 }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "var(--color-ink-3)", width: 16, height: 16 }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
           <input
@@ -60,13 +60,13 @@ export default function SearchPage() {
 
       {data && (
         <>
-          <p style={{ fontSize: 13, color: "#555568" }}>
+          <p style={{ fontSize: 13, color: "var(--color-ink-3)" }}>
             {data.total} result{data.total !== 1 ? "s" : ""}
-            {params.get("q") && <> for "<span style={{ color: "#8A8AA2" }}>{params.get("q")}</span>"</>}
+            {params.get("q") && <> for "<span style={{ color: "var(--color-ink-2)" }}>{params.get("q")}</span>"</>}
           </p>
 
           {data.results.length === 0 ? (
-            <p style={{ color: "#555568", textAlign: "center", padding: "48px 0", fontSize: 14 }}>
+            <p style={{ color: "var(--color-ink-3)", textAlign: "center", padding: "48px 0", fontSize: 14 }}>
               No results found. Try different keywords.
             </p>
           ) : (

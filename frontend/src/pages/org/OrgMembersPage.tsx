@@ -39,7 +39,7 @@ export default function OrgMembersPage() {
 
   return (
     <div style={{ maxWidth: 700, margin: "0 auto", display: "flex", flexDirection: "column", gap: 24 }}>
-      <h1 style={{ fontSize: 22, fontWeight: 700, color: "#EEEEF5", margin: 0 }}>Members</h1>
+      <h1 style={{ fontSize: 22, fontWeight: 700, color: "var(--color-ink)", margin: 0 }}>Members</h1>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
         {members.map((m) => (
@@ -55,11 +55,11 @@ export default function OrgMembersPage() {
               </div>
               <div>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 2 }}>
-                  <span style={{ fontSize: 14, fontWeight: 600, color: "#EEEEF5", fontFamily: "monospace" }}>@{m.handle}</span>
-                  {m.display_name && <span style={{ fontSize: 12, color: "#555568" }}>{m.display_name}</span>}
+                  <span style={{ fontSize: 14, fontWeight: 600, color: "var(--color-ink)", fontFamily: "monospace" }}>@{m.handle}</span>
+                  {m.display_name && <span style={{ fontSize: 12, color: "var(--color-ink-3)" }}>{m.display_name}</span>}
                   <RoleBadge role={m.role} />
                 </div>
-                <p style={{ fontSize: 12, color: "#555568", margin: 0 }}>Joined {formatDate(m.joined_at)}</p>
+                <p style={{ fontSize: 12, color: "var(--color-ink-3)", margin: 0 }}>Joined {formatDate(m.joined_at)}</p>
               </div>
             </div>
 

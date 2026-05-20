@@ -26,7 +26,7 @@ export default function GroupPage() {
   if (isLoading) return <PageLoader />;
   if (error) return (
     <div style={{ textAlign: "center", padding: "64px 24px" }}>
-      <p style={{ color: "#555568", fontSize: 14 }}>{(error as any).message}</p>
+      <p style={{ color: "var(--color-ink-3)", fontSize: 14 }}>{(error as any).message}</p>
     </div>
   );
 
@@ -47,13 +47,13 @@ export default function GroupPage() {
             }}>
               {group.name[0].toUpperCase()}
             </div>
-            <h1 style={{ fontSize: 22, fontWeight: 700, color: "#EEEEF5", margin: 0 }}>{group.name}</h1>
+            <h1 style={{ fontSize: 22, fontWeight: 700, color: "var(--color-ink)", margin: 0 }}>{group.name}</h1>
             {group.visibility === "private" && <Badge variant="default">Private</Badge>}
             {role && <Badge variant="orange">{role}</Badge>}
           </div>
-          <p style={{ fontSize: 13, color: "#555568", margin: "0 0 6px", fontFamily: "monospace" }}>/{group.slug}</p>
-          {group.description && <p style={{ fontSize: 14, color: "#8A8AA2", margin: "0 0 4px" }}>{group.description}</p>}
-          <p style={{ fontSize: 12, color: "#555568", margin: 0 }}>
+          <p style={{ fontSize: 13, color: "var(--color-ink-3)", margin: "0 0 6px", fontFamily: "monospace" }}>/{group.slug}</p>
+          {group.description && <p style={{ fontSize: 14, color: "var(--color-ink-2)", margin: "0 0 4px" }}>{group.description}</p>}
+          <p style={{ fontSize: 12, color: "var(--color-ink-3)", margin: 0 }}>
             {member_count} member{member_count !== 1 ? "s" : ""}
           </p>
         </div>
@@ -75,7 +75,7 @@ export default function GroupPage() {
 
       {/* Nav tabs */}
       {role && (
-        <div style={{ display: "flex", gap: 4, borderBottom: "1px solid #38383F", paddingBottom: 0 }}>
+        <div style={{ display: "flex", gap: 4, borderBottom: "1px solid var(--color-border)", paddingBottom: 0 }}>
           {[
             { label: "Pastes", href: `/groups/${slug}` },
             { label: "Members", href: `/groups/${slug}/members` },
@@ -84,7 +84,7 @@ export default function GroupPage() {
               key={tab.href}
               to={tab.href}
               style={{
-                padding: "8px 14px", fontSize: 14, color: "#8A8AA2",
+                padding: "8px 14px", fontSize: 14, color: "var(--color-ink-2)",
                 textDecoration: "none", borderBottom: "2px solid transparent",
                 transition: "color 150ms",
               }}

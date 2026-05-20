@@ -26,7 +26,7 @@ export default function NewOrgPage() {
 
   return (
     <div style={{ maxWidth: 640, margin: "0 auto" }}>
-      <h1 style={{ fontSize: 22, fontWeight: 700, color: "#EEEEF5", margin: "0 0 32px" }}>Create Organization</h1>
+      <h1 style={{ fontSize: 22, fontWeight: 700, color: "var(--color-ink)", margin: "0 0 32px" }}>Create Organization</h1>
 
       <div className="pp-card" style={{ padding: 24 }}>
         <form onSubmit={(e) => { e.preventDefault(); create.mutate(); }} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
@@ -44,7 +44,7 @@ export default function NewOrgPage() {
             {...field("slug")}
           />
           <div>
-            <label style={{ display: "block", fontSize: 13, fontWeight: 500, color: "#8A8AA2", marginBottom: 6 }}>Description</label>
+            <label style={{ display: "block", fontSize: 13, fontWeight: 500, color: "var(--color-ink-2)", marginBottom: 6 }}>Description</label>
             <textarea
               value={form.description}
               onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}

@@ -28,13 +28,13 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
             style={{
               display: "flex", alignItems: "center", gap: 10,
               padding: "10px 14px",
-              background: "#2E2E38",
+              background: "var(--color-card)",
               border: `1px solid ${accent[t.type]}30`,
               borderLeft: `3px solid ${accent[t.type]}`,
               borderRadius: 10,
-              boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
+              boxShadow: "var(--shadow-card-hover)",
               fontSize: 13,
-              color: "#EEEEF5",
+              color: "var(--color-ink)",
               maxWidth: 320,
             }}
           >

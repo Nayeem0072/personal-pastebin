@@ -110,12 +110,12 @@ export default function GroupInvitesPage() {
 
       {/* ── Invite by Handle ── */}
       <section style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-        <h2 style={{ fontSize: 18, fontWeight: 700, color: "#EEEEF5", margin: 0 }}>Invite by Handle</h2>
+        <h2 style={{ fontSize: 18, fontWeight: 700, color: "var(--color-ink)", margin: 0 }}>Invite by Handle</h2>
 
         <div className="pp-card" style={{ padding: 20, display: "flex", flexDirection: "column", gap: 14 }}>
           {/* Handle input with autocomplete */}
           <div style={{ position: "relative" }}>
-            <label style={{ display: "block", fontSize: 13, fontWeight: 500, color: "#8A8AA2", marginBottom: 6 }}>
+            <label style={{ display: "block", fontSize: 13, fontWeight: 500, color: "var(--color-ink-2)", marginBottom: 6 }}>
               User Handle
             </label>
             <input
@@ -137,7 +137,7 @@ export default function GroupInvitesPage() {
                 ref={suggestionsRef}
                 style={{
                   position: "absolute", top: "100%", left: 0, right: 0, zIndex: 10,
-                  background: "#28282F", border: "1px solid #38383F", borderRadius: 10,
+                  background: "var(--color-surface)", border: "1px solid var(--color-border)", borderRadius: 10,
                   marginTop: 4, overflow: "hidden",
                   boxShadow: "0 8px 24px rgba(0,0,0,0.4)",
                 }}
@@ -154,10 +154,10 @@ export default function GroupInvitesPage() {
                       display: "flex", alignItems: "center", gap: 10,
                       width: "100%", padding: "9px 12px",
                       background: "none", border: "none", cursor: "pointer",
-                      borderBottom: "1px solid #38383F", textAlign: "left",
+                      borderBottom: "1px solid var(--color-border)", textAlign: "left",
                       transition: "background 100ms",
                     }}
-                    onMouseOver={e => (e.currentTarget.style.background = "rgba(255,255,255,0.05)")}
+                    onMouseOver={e => (e.currentTarget.style.background = "var(--color-nav-hover-bg)")}
                     onMouseOut={e => (e.currentTarget.style.background = "none")}
                   >
                     <div style={{
@@ -169,9 +169,9 @@ export default function GroupInvitesPage() {
                       {u.handle[0].toUpperCase()}
                     </div>
                     <div>
-                      <p style={{ fontSize: 13, color: "#EEEEF5", margin: 0, fontWeight: 500 }}>@{u.handle}</p>
+                      <p style={{ fontSize: 13, color: "var(--color-ink)", margin: 0, fontWeight: 500 }}>@{u.handle}</p>
                       {u.display_name && (
-                        <p style={{ fontSize: 11, color: "#555568", margin: 0 }}>{u.display_name}</p>
+                        <p style={{ fontSize: 11, color: "var(--color-ink-3)", margin: 0 }}>{u.display_name}</p>
                       )}
                     </div>
                   </button>
@@ -181,8 +181,8 @@ export default function GroupInvitesPage() {
           </div>
 
           <div>
-            <label style={{ display: "block", fontSize: 13, fontWeight: 500, color: "#8A8AA2", marginBottom: 6 }}>
-              Message <span style={{ color: "#555568", fontWeight: 400 }}>(optional)</span>
+            <label style={{ display: "block", fontSize: 13, fontWeight: 500, color: "var(--color-ink-2)", marginBottom: 6 }}>
+              Message <span style={{ color: "var(--color-ink-3)", fontWeight: 400 }}>(optional)</span>
             </label>
             <textarea
               value={message}
@@ -205,9 +205,9 @@ export default function GroupInvitesPage() {
 
         {/* Pending handle invites list */}
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          <h3 style={{ fontSize: 13, fontWeight: 600, color: "#8A8AA2", margin: 0 }}>Pending Invites</h3>
+          <h3 style={{ fontSize: 13, fontWeight: 600, color: "var(--color-ink-2)", margin: 0 }}>Pending Invites</h3>
           {handleInvitesData && handleInvitesData.invites.length === 0 && (
-            <p style={{ fontSize: 13, color: "#555568", margin: 0 }}>No pending invites.</p>
+            <p style={{ fontSize: 13, color: "var(--color-ink-3)", margin: 0 }}>No pending invites.</p>
           )}
           {handleInvitesData?.invites.map((inv) => (
             <div key={inv.id} className="pp-card" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 16px", gap: 12 }}>
@@ -221,11 +221,11 @@ export default function GroupInvitesPage() {
                   {inv.invitee_handle[0].toUpperCase()}
                 </div>
                 <div>
-                  <span style={{ fontSize: 14, fontWeight: 600, color: "#EEEEF5", fontFamily: "monospace" }}>@{inv.invitee_handle}</span>
+                  <span style={{ fontSize: 14, fontWeight: 600, color: "var(--color-ink)", fontFamily: "monospace" }}>@{inv.invitee_handle}</span>
                   {inv.invitee_display_name && (
-                    <span style={{ fontSize: 12, color: "#555568", marginLeft: 8 }}>{inv.invitee_display_name}</span>
+                    <span style={{ fontSize: 12, color: "var(--color-ink-3)", marginLeft: 8 }}>{inv.invitee_display_name}</span>
                   )}
-                  <p style={{ fontSize: 11, color: "#555568", margin: "2px 0 0" }}>
+                  <p style={{ fontSize: 11, color: "var(--color-ink-3)", margin: "2px 0 0" }}>
                     Invited by @{inv.inviter_handle} · {formatRelative(inv.created_at)}
                   </p>
                 </div>
@@ -246,14 +246,14 @@ export default function GroupInvitesPage() {
       {/* ── Invite Links (existing code-based) ── */}
       <section style={{ display: "flex", flexDirection: "column", gap: 16 }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <h2 style={{ fontSize: 18, fontWeight: 700, color: "#EEEEF5", margin: 0 }}>Invite Links</h2>
+          <h2 style={{ fontSize: 18, fontWeight: 700, color: "var(--color-ink)", margin: 0 }}>Invite Links</h2>
           <Button onClick={() => createCodeInvite.mutate()} loading={createCodeInvite.isPending}>
             + Create Link
           </Button>
         </div>
 
         {codeInvitesData?.invites.length === 0 ? (
-          <p style={{ color: "#555568", fontSize: 14 }}>No active invite links. Create one to share with others.</p>
+          <p style={{ color: "var(--color-ink-3)", fontSize: 14 }}>No active invite links. Create one to share with others.</p>
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             {codeInvitesData?.invites.map((inv) => (
@@ -263,7 +263,7 @@ export default function GroupInvitesPage() {
                     <code style={{ fontSize: 13, fontFamily: "monospace", color: "#00C4FF", wordBreak: "break-all", display: "block" }}>
                       {window.location.origin}/join/{inv.code}
                     </code>
-                    <div style={{ display: "flex", gap: 12, fontSize: 12, color: "#555568", marginTop: 6 }}>
+                    <div style={{ display: "flex", gap: 12, fontSize: 12, color: "var(--color-ink-3)", marginTop: 6 }}>
                       <span>Used: {inv.use_count}{inv.max_uses ? `/${inv.max_uses}` : ""}</span>
                       {inv.expires_at && <span>Expires: {formatDate(inv.expires_at)}</span>}
                       <span>By @{inv.created_by_handle}</span>

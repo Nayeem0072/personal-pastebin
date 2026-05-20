@@ -98,12 +98,12 @@ export function NotificationBell() {
           width: 34, height: 34, borderRadius: "50%",
           border: "none", cursor: "pointer",
           display: "flex", alignItems: "center", justifyContent: "center",
-          background: isOpen ? "rgba(0,196,255,0.15)" : "rgba(255,255,255,0.06)",
-          color: isOpen ? "#00C4FF" : "#8A8AA2",
+          background: isOpen ? "var(--color-blue-dim)" : "var(--color-hover-overlay)",
+          color: isOpen ? "var(--color-blue)" : "var(--color-ink-2)",
           transition: "background 150ms, color 150ms",
         }}
-        onMouseOver={e => { if (!isOpen) { e.currentTarget.style.background = "rgba(255,255,255,0.1)"; e.currentTarget.style.color = "#EEEEF5"; } }}
-        onMouseOut={e => { if (!isOpen) { e.currentTarget.style.background = "rgba(255,255,255,0.06)"; e.currentTarget.style.color = "#8A8AA2"; } }}
+        onMouseOver={e => { if (!isOpen) { e.currentTarget.style.background = "var(--color-nav-hover-bg)"; e.currentTarget.style.color = "var(--color-ink)"; } }}
+        onMouseOut={e => { if (!isOpen) { e.currentTarget.style.background = "var(--color-hover-overlay)"; e.currentTarget.style.color = "var(--color-ink-2)"; } }}
       >
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
           <path d="M8 1.5A4.5 4.5 0 003.5 6v3.5L2 11h12l-1.5-1.5V6A4.5 4.5 0 008 1.5z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round"/>
@@ -113,7 +113,7 @@ export function NotificationBell() {
           <span style={{
             position: "absolute", top: 2, right: 2,
             minWidth: 14, height: 14, borderRadius: 7,
-            background: "#00C4FF", color: "#0A0A14",
+            background: "var(--color-blue)", color: "var(--color-btn-primary-text)",
             fontSize: 9, fontWeight: 700,
             display: "flex", alignItems: "center", justifyContent: "center",
             padding: "0 3px", lineHeight: 1,
@@ -129,25 +129,25 @@ export function NotificationBell() {
           top: dropdownPos.top,
           left: dropdownPos.left,
           width: Math.min(320, window.innerWidth - 16),
-          background: "#2E2E38",
-          border: "1px solid #38383F",
+          background: "var(--color-card)",
+          border: "1px solid var(--color-border)",
           borderRadius: 14,
-          boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
+          boxShadow: "var(--shadow-card-hover)",
           zIndex: 9999,
           overflow: "hidden",
         }}>
           {/* Header */}
           <div style={{
             display: "flex", alignItems: "center", justifyContent: "space-between",
-            padding: "12px 16px", borderBottom: "1px solid #38383F",
+            padding: "12px 16px", borderBottom: "1px solid var(--color-border)",
           }}>
-            <span style={{ fontSize: 13, fontWeight: 600, color: "#EEEEF5" }}>Notifications</span>
+            <span style={{ fontSize: 13, fontWeight: 600, color: "var(--color-ink)" }}>Notifications</span>
             <button
               onClick={() => markAllRead.mutate()}
               disabled={unread === 0 || markAllRead.isPending}
               style={{
                 background: "none", border: "none", cursor: unread === 0 ? "default" : "pointer",
-                fontSize: 11, color: unread === 0 ? "#555568" : "#00C4FF",
+                fontSize: 11, color: unread === 0 ? "var(--color-ink-3)" : "var(--color-blue)",
                 padding: 0,
               }}
             >
@@ -158,7 +158,7 @@ export function NotificationBell() {
           {/* List */}
           <div style={{ maxHeight: 400, overflowY: "auto" }}>
             {notifications.length === 0 ? (
-              <div style={{ padding: "32px 16px", textAlign: "center", color: "#555568", fontSize: 13 }}>
+              <div style={{ padding: "32px 16px", textAlign: "center", color: "var(--color-ink-3)", fontSize: 13 }}>
                 No notifications yet
               </div>
             ) : (
@@ -175,13 +175,13 @@ export function NotificationBell() {
                       style={{
                         display: "flex", alignItems: "flex-start", gap: 10,
                         width: "100%", padding: "12px 16px",
-                        background: n.read_at === null ? "rgba(0,196,255,0.04)" : "none",
-                        border: "none", borderBottom: "1px solid #38383F",
+                        background: n.read_at === null ? "var(--color-blue-dim)" : "none",
+                        border: "none", borderBottom: "1px solid var(--color-border)",
                         cursor: "pointer", textAlign: "left",
                         transition: "background 150ms",
                       }}
-                      onMouseOver={e => (e.currentTarget.style.background = "rgba(255,255,255,0.04)")}
-                      onMouseOut={e => (e.currentTarget.style.background = n.read_at === null ? "rgba(0,196,255,0.04)" : "none")}
+                      onMouseOver={e => (e.currentTarget.style.background = "var(--color-hover-overlay)")}
+                      onMouseOut={e => (e.currentTarget.style.background = n.read_at === null ? "var(--color-blue-dim)" : "none")}
                     >
                       <div style={{
                         width: 6, height: 6, borderRadius: "50%", flexShrink: 0, marginTop: 5,
@@ -189,17 +189,17 @@ export function NotificationBell() {
                       }} />
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <p style={{
-                          fontSize: 13, color: "#EEEEF5", margin: "0 0 2px",
+                          fontSize: 13, color: "var(--color-ink)", margin: "0 0 2px",
                           overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
                         }}>
                           {n.doc_title}
                         </p>
-                        <p style={{ fontSize: 11, color: "#555568", margin: 0 }}>
+                        <p style={{ fontSize: 11, color: "var(--color-ink-3)", margin: 0 }}>
                           <span style={{ fontFamily: "monospace" }}>@{n.sender_handle}</span>
                           {" · "}{formatRelative(n.created_at)}
                         </p>
                         {n.message && (
-                          <p style={{ fontSize: 11, color: "#8A8AA2", margin: "3px 0 0", fontStyle: "italic", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                          <p style={{ fontSize: 11, color: "var(--color-ink-2)", margin: "3px 0 0", fontStyle: "italic", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                             "{n.message}"
                           </p>
                         )}
@@ -215,8 +215,8 @@ export function NotificationBell() {
                     style={{
                       display: "flex", alignItems: "flex-start", gap: 10,
                       padding: "12px 16px",
-                      background: n.read_at === null ? "rgba(0,196,255,0.04)" : "none",
-                      borderBottom: "1px solid #38383F",
+                      background: n.read_at === null ? "var(--color-blue-dim)" : "none",
+                      borderBottom: "1px solid var(--color-border)",
                     }}
                     onClick={() => {
                       if (n.read_at === null) {
@@ -231,15 +231,15 @@ export function NotificationBell() {
                       background: n.read_at === null ? "#00C4FF" : "transparent",
                     }} />
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <p style={{ fontSize: 13, color: "#EEEEF5", margin: "0 0 2px", fontWeight: 500 }}>
-                        Group invite: <span style={{ color: "#00C4FF" }}>{n.group_name}</span>
+                      <p style={{ fontSize: 13, color: "var(--color-ink)", margin: "0 0 2px", fontWeight: 500 }}>
+                        Group invite: <span style={{ color: "var(--color-blue)" }}>{n.group_name}</span>
                       </p>
-                      <p style={{ fontSize: 11, color: "#555568", margin: "0 0 6px" }}>
+                      <p style={{ fontSize: 11, color: "var(--color-ink-3)", margin: "0 0 6px" }}>
                         From <span style={{ fontFamily: "monospace" }}>@{n.inviter_handle}</span>
                         {" · "}{formatRelative(n.created_at)}
                       </p>
                       {n.message && (
-                        <p style={{ fontSize: 11, color: "#8A8AA2", margin: "0 0 8px", fontStyle: "italic", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                        <p style={{ fontSize: 11, color: "var(--color-ink-2)", margin: "0 0 8px", fontStyle: "italic", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                           "{n.message}"
                         </p>
                       )}
@@ -252,7 +252,7 @@ export function NotificationBell() {
                           disabled={respondToInvite.isPending}
                           style={{
                             padding: "4px 10px", borderRadius: 6, border: "none", cursor: "pointer",
-                            background: "#00C4FF", color: "#0A0A14", fontSize: 11, fontWeight: 600,
+                            background: "var(--color-blue)", color: "var(--color-btn-primary-text)", fontSize: 11, fontWeight: 600,
                           }}
                         >
                           Accept
@@ -265,8 +265,8 @@ export function NotificationBell() {
                           disabled={respondToInvite.isPending}
                           style={{
                             padding: "4px 10px", borderRadius: 6,
-                            border: "1px solid #38383F", cursor: "pointer",
-                            background: "none", color: "#8A8AA2", fontSize: 11, fontWeight: 600,
+                            border: "1px solid var(--color-border)", cursor: "pointer",
+                            background: "none", color: "var(--color-ink-2)", fontSize: 11, fontWeight: 600,
                           }}
                         >
                           Decline
@@ -280,11 +280,11 @@ export function NotificationBell() {
           </div>
 
           {/* Footer */}
-          <div style={{ padding: "10px 16px", borderTop: "1px solid #38383F" }}>
+          <div style={{ padding: "10px 16px", borderTop: "1px solid var(--color-border)" }}>
             <Link
               to="/shared"
               onClick={() => setIsOpen(false)}
-              style={{ fontSize: 12, color: "#00C4FF", textDecoration: "none" }}
+              style={{ fontSize: 12, color: "var(--color-blue)", textDecoration: "none" }}
             >
               View all shared pastes →
             </Link>

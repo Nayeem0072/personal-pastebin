@@ -31,7 +31,7 @@ export default function GroupRequestsPage() {
 
   return (
     <div style={{ maxWidth: 700, margin: "0 auto", display: "flex", flexDirection: "column", gap: 24 }}>
-      <h1 style={{ fontSize: 22, fontWeight: 700, color: "#EEEEF5", margin: 0 }}>Join Requests</h1>
+      <h1 style={{ fontSize: 22, fontWeight: 700, color: "var(--color-ink)", margin: 0 }}>Join Requests</h1>
 
       {data?.requests.length === 0 ? (
         <EmptyState title="No pending requests" description="When users request to join, they'll appear here." />
@@ -49,13 +49,13 @@ export default function GroupRequestsPage() {
                   {(req.display_name ?? req.handle)[0].toUpperCase()}
                 </div>
                 <div>
-                  <div style={{ fontSize: 14, fontWeight: 600, color: "#EEEEF5", fontFamily: "monospace", marginBottom: 2 }}>
+                  <div style={{ fontSize: 14, fontWeight: 600, color: "var(--color-ink)", fontFamily: "monospace", marginBottom: 2 }}>
                     @{req.handle}
                   </div>
                   {req.message && (
-                    <p style={{ fontSize: 12, color: "#8A8AA2", margin: "0 0 2px" }}>"{req.message}"</p>
+                    <p style={{ fontSize: 12, color: "var(--color-ink-2)", margin: "0 0 2px" }}>"{req.message}"</p>
                   )}
-                  <p style={{ fontSize: 12, color: "#555568", margin: 0 }}>{formatRelative(req.created_at)}</p>
+                  <p style={{ fontSize: 12, color: "var(--color-ink-3)", margin: 0 }}>{formatRelative(req.created_at)}</p>
                 </div>
               </div>
               <div style={{ display: "flex", gap: 8 }}>

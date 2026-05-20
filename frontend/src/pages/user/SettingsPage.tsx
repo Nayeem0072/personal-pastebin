@@ -46,21 +46,21 @@ export default function SettingsPage() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
-      <h1 style={{ fontSize: 22, fontWeight: 700, color: "#EEEEF5", margin: 0 }}>Settings</h1>
+      <h1 style={{ fontSize: 22, fontWeight: 700, color: "var(--color-ink)", margin: 0 }}>Settings</h1>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 20, alignItems: "start" }}>
         {/* Profile */}
         <div className="pp-card" style={{ padding: 24 }}>
-          <h2 style={{ fontSize: 14, fontWeight: 600, color: "#EEEEF5", margin: "0 0 20px", paddingBottom: 12, borderBottom: "1px solid #38383F" }}>
+          <h2 style={{ fontSize: 14, fontWeight: 600, color: "var(--color-ink)", margin: "0 0 20px", paddingBottom: 12, borderBottom: "1px solid var(--color-border)" }}>
             Profile
           </h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-            <div style={{ fontSize: 13, color: "#555568" }}>
-              Handle: <span style={{ color: "#8A8AA2", fontFamily: "monospace" }}>@{user?.handle}</span>
+            <div style={{ fontSize: 13, color: "var(--color-ink-3)" }}>
+              Handle: <span style={{ color: "var(--color-ink-2)", fontFamily: "monospace" }}>@{user?.handle}</span>
             </div>
             <Input label="Display Name" value={profile.display_name} onChange={(e) => setProfile((p) => ({ ...p, display_name: e.target.value }))} />
             <div>
-              <label style={{ display: "block", fontSize: 13, fontWeight: 500, color: "#8A8AA2", marginBottom: 6 }}>Bio</label>
+              <label style={{ display: "block", fontSize: 13, fontWeight: 500, color: "var(--color-ink-2)", marginBottom: 6 }}>Bio</label>
               <textarea
                 value={profile.bio}
                 onChange={(e) => setProfile((p) => ({ ...p, bio: e.target.value }))}
@@ -78,7 +78,7 @@ export default function SettingsPage() {
 
         {/* Password */}
         <div className="pp-card" style={{ padding: 24 }}>
-          <h2 style={{ fontSize: 14, fontWeight: 600, color: "#EEEEF5", margin: "0 0 20px", paddingBottom: 12, borderBottom: "1px solid #38383F" }}>
+          <h2 style={{ fontSize: 14, fontWeight: 600, color: "var(--color-ink)", margin: "0 0 20px", paddingBottom: 12, borderBottom: "1px solid var(--color-border)" }}>
             Change Password
           </h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
@@ -93,7 +93,7 @@ export default function SettingsPage() {
 
       {/* Danger zone */}
       <div className="pp-card" style={{ padding: 24 }}>
-        <h2 style={{ fontSize: 14, fontWeight: 600, color: "#EEEEF5", margin: "0 0 20px", paddingBottom: 12, borderBottom: "1px solid #38383F" }}>
+        <h2 style={{ fontSize: 14, fontWeight: 600, color: "var(--color-ink)", margin: "0 0 20px", paddingBottom: 12, borderBottom: "1px solid var(--color-border)" }}>
           Account
         </h2>
         <Button

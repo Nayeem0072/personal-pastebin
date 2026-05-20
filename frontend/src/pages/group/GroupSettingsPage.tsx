@@ -60,15 +60,15 @@ export default function GroupSettingsPage() {
 
   return (
     <div style={{ maxWidth: 560, margin: "0 auto", display: "flex", flexDirection: "column", gap: 40 }}>
-      <h1 style={{ fontSize: 22, fontWeight: 700, color: "#EEEEF5", margin: 0 }}>Group Settings</h1>
+      <h1 style={{ fontSize: 22, fontWeight: 700, color: "var(--color-ink)", margin: 0 }}>Group Settings</h1>
 
       <section style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-        <h2 style={{ fontSize: 13, fontWeight: 600, color: "#8A8AA2", marginBottom: 0, paddingBottom: 12, borderBottom: "1px solid #38383F" }}>
+        <h2 style={{ fontSize: 13, fontWeight: 600, color: "var(--color-ink-2)", marginBottom: 0, paddingBottom: 12, borderBottom: "1px solid var(--color-border)" }}>
           General
         </h2>
         <Input label="Name" value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} />
         <div>
-          <label style={{ display: "block", fontSize: 13, fontWeight: 500, color: "#8A8AA2", marginBottom: 6 }}>Description</label>
+          <label style={{ display: "block", fontSize: 13, fontWeight: 500, color: "var(--color-ink-2)", marginBottom: 6 }}>Description</label>
           <textarea
             value={form.description}
             onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
@@ -92,10 +92,10 @@ export default function GroupSettingsPage() {
       </section>
 
       <section style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-        <h2 style={{ fontSize: 13, fontWeight: 600, color: "#f87171", paddingBottom: 12, borderBottom: "1px solid #38383F", margin: 0 }}>
+        <h2 style={{ fontSize: 13, fontWeight: 600, color: "#f87171", paddingBottom: 12, borderBottom: "1px solid var(--color-border)", margin: 0 }}>
           Danger Zone
         </h2>
-        <p style={{ fontSize: 13, color: "#555568", margin: 0 }}>
+        <p style={{ fontSize: 13, color: "var(--color-ink-3)", margin: 0 }}>
           Deleting a group is permanent and cannot be undone. All group data will be removed.
         </p>
         <div>
@@ -104,8 +104,8 @@ export default function GroupSettingsPage() {
       </section>
 
       <Modal open={deleteOpen} onClose={() => setDeleteOpen(false)} title="Delete Group">
-        <p style={{ fontSize: 13, color: "#8A8AA2", marginBottom: 20, lineHeight: 1.6 }}>
-          Are you sure you want to delete <strong style={{ color: "#EEEEF5" }}>{data?.group.name}</strong>? This cannot be undone.
+        <p style={{ fontSize: 13, color: "var(--color-ink-2)", marginBottom: 20, lineHeight: 1.6 }}>
+          Are you sure you want to delete <strong style={{ color: "var(--color-ink)" }}>{data?.group.name}</strong>? This cannot be undone.
         </p>
         <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
           <Button variant="ghost" size="sm" onClick={() => setDeleteOpen(false)}>Cancel</Button>

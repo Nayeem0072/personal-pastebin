@@ -61,7 +61,7 @@ export function SendPanel({ slug, privacy }: Props) {
 
   if (privacy === "private") {
     return (
-      <p style={{ fontSize: 13, color: "#555568", textAlign: "center", padding: "12px 0" }}>
+      <p style={{ fontSize: 13, color: "var(--color-ink-3)", textAlign: "center", padding: "12px 0" }}>
         Private documents cannot be sent to other users.
       </p>
     );
@@ -71,7 +71,7 @@ export function SendPanel({ slug, privacy }: Props) {
     <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
       {/* Recipient input with autocomplete */}
       <div style={{ position: "relative" }}>
-        <label style={{ display: "block", fontSize: 13, fontWeight: 500, color: "#8A8AA2", marginBottom: 6 }}>
+        <label style={{ display: "block", fontSize: 13, fontWeight: 500, color: "var(--color-ink-2)", marginBottom: 6 }}>
           Recipient
         </label>
         <input
@@ -94,9 +94,9 @@ export function SendPanel({ slug, privacy }: Props) {
             ref={suggestionsRef}
             style={{
               position: "absolute", top: "100%", left: 0, right: 0, zIndex: 10,
-              background: "#28282F", border: "1px solid #38383F", borderRadius: 10,
+              background: "var(--color-surface)", border: "1px solid var(--color-border)", borderRadius: 10,
               marginTop: 4, overflow: "hidden",
-              boxShadow: "0 8px 24px rgba(0,0,0,0.4)",
+              boxShadow: "var(--shadow-card-hover)",
             }}
           >
             {suggestions.map((u) => (
@@ -111,10 +111,10 @@ export function SendPanel({ slug, privacy }: Props) {
                   display: "flex", alignItems: "center", gap: 10,
                   width: "100%", padding: "9px 12px",
                   background: "none", border: "none", cursor: "pointer",
-                  borderBottom: "1px solid #38383F", textAlign: "left",
+                  borderBottom: "1px solid var(--color-border)", textAlign: "left",
                   transition: "background 100ms",
                 }}
-                onMouseOver={e => (e.currentTarget.style.background = "rgba(255,255,255,0.05)")}
+                onMouseOver={e => (e.currentTarget.style.background = "var(--color-nav-hover-bg)")}
                 onMouseOut={e => (e.currentTarget.style.background = "none")}
               >
                 <div style={{
@@ -126,9 +126,9 @@ export function SendPanel({ slug, privacy }: Props) {
                   {u.handle[0].toUpperCase()}
                 </div>
                 <div>
-                  <p style={{ fontSize: 13, color: "#EEEEF5", margin: 0, fontWeight: 500 }}>@{u.handle}</p>
+                  <p style={{ fontSize: 13, color: "var(--color-ink)", margin: 0, fontWeight: 500 }}>@{u.handle}</p>
                   {u.display_name && (
-                    <p style={{ fontSize: 11, color: "#555568", margin: 0 }}>{u.display_name}</p>
+                    <p style={{ fontSize: 11, color: "var(--color-ink-3)", margin: 0 }}>{u.display_name}</p>
                   )}
                 </div>
               </button>
@@ -139,8 +139,8 @@ export function SendPanel({ slug, privacy }: Props) {
 
       {/* Optional message */}
       <div>
-        <label style={{ display: "block", fontSize: 13, fontWeight: 500, color: "#8A8AA2", marginBottom: 6 }}>
-          Message <span style={{ color: "#555568", fontWeight: 400 }}>(optional)</span>
+        <label style={{ display: "block", fontSize: 13, fontWeight: 500, color: "var(--color-ink-2)", marginBottom: 6 }}>
+          Message <span style={{ color: "var(--color-ink-3)", fontWeight: 400 }}>(optional)</span>
         </label>
         <textarea
           value={message}

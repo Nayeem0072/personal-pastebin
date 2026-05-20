@@ -13,7 +13,7 @@ export function DocViewer({ html, language, content }: DocViewerProps) {
     return (
       <div
         className="md-body"
-        style={{ padding: "1.5rem 2rem", color: "#EEEEF5" }}
+        style={{ padding: "1.5rem 2rem", color: "var(--color-ink)" }}
         dangerouslySetInnerHTML={{ __html: rendered }}
       />
     );
@@ -23,7 +23,7 @@ export function DocViewer({ html, language, content }: DocViewerProps) {
   const cleanHtml = html.replace(/background-color\s*:[^;"']+;?/gi, "");
   return (
     <div
-      style={{ background: "#1C1C22", overflowX: "auto", padding: "1.5rem", fontFamily: "JetBrains Mono, monospace", fontSize: 13, lineHeight: 1.75 }}
+      style={{ background: "var(--color-bg)", overflowX: "auto", padding: "1.5rem", fontFamily: "JetBrains Mono, monospace", fontSize: 13, lineHeight: 1.75 }}
       dangerouslySetInnerHTML={{ __html: cleanHtml }}
     />
   );

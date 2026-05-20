@@ -45,8 +45,8 @@ export default function SharedPage() {
       {/* Header */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
         <div>
-          <h1 style={{ fontSize: 22, fontWeight: 700, color: "#EEEEF5", margin: "0 0 4px" }}>Shared with me</h1>
-          <p style={{ fontSize: 13, color: "#555568", margin: 0 }}>
+          <h1 style={{ fontSize: 22, fontWeight: 700, color: "var(--color-ink)", margin: "0 0 4px" }}>Shared with me</h1>
+          <p style={{ fontSize: 13, color: "var(--color-ink-3)", margin: 0 }}>
             {total > 0 ? `${total} paste${total !== 1 ? "s" : ""}` : "Pastes others have sent you"}
           </p>
         </div>
@@ -85,7 +85,7 @@ export default function SharedPage() {
                   }} />
                 )}
                 <div>
-                  <div style={{ fontSize: 11, color: "#555568", marginBottom: 4, paddingLeft: 2, fontFamily: "monospace" }}>
+                  <div style={{ fontSize: 11, color: "var(--color-ink-3)", marginBottom: 4, paddingLeft: 2, fontFamily: "monospace" }}>
                     from @{send.sender_handle}
                   </div>
                   <DocCard

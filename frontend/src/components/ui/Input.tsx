@@ -13,7 +13,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
         {label && (
-          <label htmlFor={inputId} style={{ fontSize: 13, fontWeight: 500, color: "#8A8AA2" }}>
+          <label htmlFor={inputId} style={{ fontSize: 13, fontWeight: 500, color: "var(--color-ink-2)" }}>
             {label}
           </label>
         )}
@@ -21,7 +21,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           {prefix && (
             <div style={{
               position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)",
-              color: "#555568", pointerEvents: "none", display: "flex", alignItems: "center",
+              color: "var(--color-ink-3)", pointerEvents: "none", display: "flex", alignItems: "center",
             }}>
               {prefix}
             </div>
@@ -34,7 +34,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             {...props}
           />
         </div>
-        {hint && !error && <p style={{ fontSize: 12, color: "#555568", lineHeight: 1.5 }}>{hint}</p>}
+        {hint && !error && <p style={{ fontSize: 12, color: "var(--color-ink-3)", lineHeight: 1.5 }}>{hint}</p>}
         {error && <p style={{ fontSize: 12, color: "#f87171" }}>{error}</p>}
       </div>
     );

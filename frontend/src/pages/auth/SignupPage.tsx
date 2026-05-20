@@ -60,8 +60,8 @@ export default function SignupPage() {
               <path d="M5 7h6M5 9.5h6M5 12h4" stroke="rgba(0,128,255,0.7)" strokeWidth="1.1" strokeLinecap="round"/>
             </svg>
           </div>
-          <h1 style={{ fontSize: 22, fontWeight: 700, color: "#EEEEF5", margin: "0 0 6px" }}>Create account</h1>
-          <p style={{ fontSize: 14, color: "#555568", margin: 0 }}>Join Clippr to start sharing</p>
+          <h1 style={{ fontSize: 22, fontWeight: 700, color: "var(--color-ink)", margin: "0 0 6px" }}>Create account</h1>
+          <p style={{ fontSize: 14, color: "var(--color-ink-3)", margin: 0 }}>Join Clippr to start sharing</p>
         </div>
 
         <div className="pp-card" style={{ padding: 24 }}>
@@ -79,7 +79,7 @@ export default function SignupPage() {
                   Available
                 </p>
               )}
-              {handleStatus === "checking" && <p style={{ fontSize: 12, color: "#555568", marginTop: 4 }}>Checking...</p>}
+              {handleStatus === "checking" && <p style={{ fontSize: 12, color: "var(--color-ink-3)", marginTop: 4 }}>Checking...</p>}
             </div>
 
             <Input label="Email" type="email" autoComplete="email" required placeholder="you@example.com" {...field("email")} />
@@ -98,7 +98,7 @@ export default function SignupPage() {
           </form>
         </div>
 
-        <p style={{ textAlign: "center", fontSize: 13, color: "#555568", marginTop: 20 }}>
+        <p style={{ textAlign: "center", fontSize: 13, color: "var(--color-ink-3)", marginTop: 20 }}>
           Already have an account?{" "}
           <Link to="/login" style={{ color: "#00C4FF", textDecoration: "none", fontWeight: 500 }}>Sign in</Link>
         </p>

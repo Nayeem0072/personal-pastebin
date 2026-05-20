@@ -40,8 +40,8 @@ export default function JoinGroupPage() {
   if (error) {
     return (
       <div style={{ maxWidth: 440, margin: "0 auto", textAlign: "center", padding: "64px 24px" }}>
-        <h1 style={{ fontSize: 20, fontWeight: 700, color: "#EEEEF5", marginBottom: 8 }}>Invalid Invite</h1>
-        <p style={{ color: "#555568", fontSize: 14 }}>{(error as any).message}</p>
+        <h1 style={{ fontSize: 20, fontWeight: 700, color: "var(--color-ink)", marginBottom: 8 }}>Invalid Invite</h1>
+        <p style={{ color: "var(--color-ink-3)", fontSize: 14 }}>{(error as any).message}</p>
       </div>
     );
   }
@@ -62,16 +62,16 @@ export default function JoinGroupPage() {
         </div>
 
         <div>
-          <h1 style={{ fontSize: 20, fontWeight: 700, color: "#EEEEF5", margin: "0 0 4px" }}>{group.name}</h1>
-          <p style={{ fontSize: 13, color: "#555568", margin: 0, fontFamily: "monospace" }}>@{group.slug}</p>
+          <h1 style={{ fontSize: 20, fontWeight: 700, color: "var(--color-ink)", margin: "0 0 4px" }}>{group.name}</h1>
+          <p style={{ fontSize: 13, color: "var(--color-ink-3)", margin: 0, fontFamily: "monospace" }}>@{group.slug}</p>
         </div>
 
         {group.description && (
-          <p style={{ fontSize: 14, color: "#8A8AA2", margin: 0 }}>{group.description}</p>
+          <p style={{ fontSize: 14, color: "var(--color-ink-2)", margin: 0 }}>{group.description}</p>
         )}
 
         {(invite.expires_at || invite.max_uses) && (
-          <div style={{ fontSize: 12, color: "#555568", display: "flex", flexDirection: "column", gap: 4 }}>
+          <div style={{ fontSize: 12, color: "var(--color-ink-3)", display: "flex", flexDirection: "column", gap: 4 }}>
             {invite.expires_at && <span>Expires: {formatDate(invite.expires_at)}</span>}
             {invite.max_uses && <span>Uses: {invite.use_count} / {invite.max_uses}</span>}
           </div>
@@ -83,7 +83,7 @@ export default function JoinGroupPage() {
           </Button>
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            <p style={{ fontSize: 13, color: "#555568", margin: 0 }}>Create an account or sign in to join.</p>
+            <p style={{ fontSize: 13, color: "var(--color-ink-3)", margin: 0 }}>Create an account or sign in to join.</p>
             <Button
               style={{ width: "100%" }}
               onClick={() => navigate(`/signup?next=/join/${code}`)}

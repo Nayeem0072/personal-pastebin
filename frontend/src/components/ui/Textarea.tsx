@@ -11,7 +11,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     return (
       <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
         {label && (
-          <label htmlFor={inputId} style={{ fontSize: 13, fontWeight: 500, color: "#8A8AA2" }}>
+          <label htmlFor={inputId} style={{ fontSize: 13, fontWeight: 500, color: "var(--color-ink-2)" }}>
             {label}
           </label>
         )}

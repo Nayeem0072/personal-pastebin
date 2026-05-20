@@ -77,7 +77,7 @@ export default function EditDocPage() {
   return (
     <div style={{ maxWidth: 800, margin: "0 auto" }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
-        <h1 style={{ fontSize: 20, fontWeight: 700, color: "#EEEEF5", margin: 0 }}>Edit Paste</h1>
+        <h1 style={{ fontSize: 20, fontWeight: 700, color: "var(--color-ink)", margin: 0 }}>Edit Paste</h1>
         <div style={{ display: "flex", gap: 8 }}>
           <Button variant="ghost" onClick={() => navigate(`/docs/${slug}`)}>Cancel</Button>
           <Button onClick={() => update.mutate()} loading={update.isPending}>Save Changes</Button>

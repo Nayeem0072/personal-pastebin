@@ -91,7 +91,7 @@ const [sendOpen, setSendOpen] = useState(false);
         <div className="flex-1 min-w-0">
           <h1 className="font-display text-2xl font-bold text-ink truncate">{doc.title}</h1>
           <div className="flex items-center gap-3 mt-1.5 flex-wrap">
-            <Link to={`/${doc.owner.handle}`} style={{ fontSize: 13, color: "#8A8AA2", textDecoration: "none", fontFamily: "monospace" }}>
+            <Link to={`/${doc.owner.handle}`} style={{ fontSize: 13, color: "var(--color-ink-2)", textDecoration: "none", fontFamily: "monospace" }}>
               @{doc.owner.handle}
             </Link>
             <span className="text-ink-3/40 text-xs">·</span>
@@ -166,21 +166,21 @@ const [sendOpen, setSendOpen] = useState(false);
       </div>
 
       {/* Code viewer */}
-      <div style={{ borderRadius: 14, overflow: "hidden", border: "1px solid #38383F" }}>
+      <div style={{ borderRadius: 14, overflow: "hidden", border: "1px solid var(--color-border)" }}>
         {/* Tab bar */}
-        <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 16px", background: "#28282F", borderBottom: "1px solid #38383F" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 16px", background: "var(--color-surface)", borderBottom: "1px solid var(--color-border)" }}>
           <div style={{ display: "flex", gap: 6 }}>
-            <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#38383F" }} />
-            <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#38383F" }} />
-            <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#38383F" }} />
+            <div style={{ width: 10, height: 10, borderRadius: "50%", background: "var(--color-border)" }} />
+            <div style={{ width: 10, height: 10, borderRadius: "50%", background: "var(--color-border)" }} />
+            <div style={{ width: 10, height: 10, borderRadius: "50%", background: "var(--color-border)" }} />
           </div>
-          <span style={{ fontSize: 11, fontFamily: "monospace", color: "#555568" }}>{doc.title}.{doc.language}</span>
+          <span style={{ fontSize: 11, fontFamily: "monospace", color: "var(--color-ink-3)" }}>{doc.title}.{doc.language}</span>
         </div>
 
         {doc.highlighted_html ? (
           <DocViewer html={doc.highlighted_html} language={doc.language} content={doc.content} />
         ) : (
-          <pre style={{ background: "#1C1C22", padding: "1.5rem", fontSize: 13, fontFamily: "JetBrains Mono, monospace", color: "#8A8AA2", overflowX: "auto", lineHeight: 1.75, margin: 0 }}>
+          <pre style={{ background: "var(--color-bg)", padding: "1.5rem", fontSize: 13, fontFamily: "JetBrains Mono, monospace", color: "var(--color-ink-2)", overflowX: "auto", lineHeight: 1.75, margin: 0 }}>
             {doc.content}
           </pre>
         )}

@@ -34,8 +34,8 @@ export default function SavedPage() {
       {/* Header */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
         <div>
-          <h1 style={{ fontSize: 22, fontWeight: 700, color: "#EEEEF5", margin: "0 0 4px" }}>Saved Pastes</h1>
-          <p style={{ fontSize: 13, color: "#555568", margin: 0 }}>
+          <h1 style={{ fontSize: 22, fontWeight: 700, color: "var(--color-ink)", margin: "0 0 4px" }}>Saved Pastes</h1>
+          <p style={{ fontSize: 13, color: "var(--color-ink-3)", margin: 0 }}>
             {total > 0 ? `${total} paste${total !== 1 ? "s" : ""}` : "Pastes you've saved for later"}
           </p>
         </div>
@@ -71,7 +71,7 @@ export default function SavedPage() {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 12 }}>
             {pastes.map((paste) => (
               <div key={paste.slug}>
-                <div style={{ fontSize: 11, color: "#555568", marginBottom: 4, paddingLeft: 2, fontFamily: "monospace" }}>
+                <div style={{ fontSize: 11, color: "var(--color-ink-3)", marginBottom: 4, paddingLeft: 2, fontFamily: "monospace" }}>
                   by @{paste.owner_handle}
                 </div>
                 <DocCard

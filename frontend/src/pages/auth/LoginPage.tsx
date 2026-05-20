@@ -38,8 +38,8 @@ export default function LoginPage() {
               <path d="M5 7h6M5 9.5h6M5 12h4" stroke="rgba(0,128,255,0.7)" strokeWidth="1.1" strokeLinecap="round"/>
             </svg>
           </div>
-          <h1 style={{ fontSize: 22, fontWeight: 700, color: "#EEEEF5", margin: "0 0 6px" }}>Welcome back</h1>
-          <p style={{ fontSize: 14, color: "#555568", margin: 0 }}>Sign in to your Clippr account</p>
+          <h1 style={{ fontSize: 22, fontWeight: 700, color: "var(--color-ink)", margin: "0 0 6px" }}>Welcome back</h1>
+          <p style={{ fontSize: 14, color: "var(--color-ink-3)", margin: 0 }}>Sign in to your Clippr account</p>
         </div>
 
         <div className="pp-card" style={{ padding: 24 }}>
@@ -63,7 +63,7 @@ export default function LoginPage() {
           </form>
         </div>
 
-        <p style={{ textAlign: "center", fontSize: 13, color: "#555568", marginTop: 20 }}>
+        <p style={{ textAlign: "center", fontSize: 13, color: "var(--color-ink-3)", marginTop: 20 }}>
           Don't have an account?{" "}
           <Link to="/signup" style={{ color: "#00C4FF", textDecoration: "none", fontWeight: 500 }}>Sign up</Link>
         </p>

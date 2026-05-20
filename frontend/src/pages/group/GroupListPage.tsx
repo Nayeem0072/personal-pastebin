@@ -18,7 +18,7 @@ export default function GroupListPage() {
 
   if (error) return (
     <div style={{ textAlign: "center", padding: "64px 24px" }}>
-      <p style={{ color: "#555568", fontSize: 14 }}>{(error as any).message}</p>
+      <p style={{ color: "var(--color-ink-3)", fontSize: 14 }}>{(error as any).message}</p>
     </div>
   );
 
@@ -28,8 +28,8 @@ export default function GroupListPage() {
     <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div>
-          <h1 style={{ fontSize: 22, fontWeight: 700, color: "#EEEEF5", margin: "0 0 4px" }}>Groups</h1>
-          <p style={{ fontSize: 13, color: "#555568", margin: 0 }}>Teams and groups you belong to</p>
+          <h1 style={{ fontSize: 22, fontWeight: 700, color: "var(--color-ink)", margin: "0 0 4px" }}>Groups</h1>
+          <p style={{ fontSize: 13, color: "var(--color-ink-3)", margin: 0 }}>Teams and groups you belong to</p>
         </div>
         <Link to="/groups/new">
           <Button>+ New Group</Button>
