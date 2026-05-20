@@ -79,7 +79,6 @@ export default function SavedPage() {
                   title={paste.title}
                   language={paste.language}
                   privacy={paste.privacy}
-                  description={paste.description}
                   created_at={paste.created_at}
                 />
               </div>

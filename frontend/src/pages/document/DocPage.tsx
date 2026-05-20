@@ -105,7 +105,6 @@ const [sendOpen, setSendOpen] = useState(false);
               </>
             )}
           </div>
-          {doc.description && <p className="text-[13px] text-ink-3 mt-2">{doc.description}</p>}
         </div>
 
         <div className="flex items-center gap-2 shrink-0">

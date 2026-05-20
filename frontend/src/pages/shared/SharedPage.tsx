@@ -93,7 +93,7 @@ export default function SharedPage() {
                     title={send.title}
                     language={send.language}
                     privacy={send.privacy}
-                    description={send.message ?? send.description}
+                    description={send.message ?? undefined}
                     created_at={send.sent_at}
                   />
                 </div>

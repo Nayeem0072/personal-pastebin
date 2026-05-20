@@ -33,7 +33,6 @@ export default function ProfilePage() {
   const filteredDocs = isSelf && filterQ
     ? docs.filter((doc: any) =>
         doc.title.toLowerCase().includes(filterQ.toLowerCase()) ||
-        (doc.description ?? "").toLowerCase().includes(filterQ.toLowerCase()) ||
         doc.language.toLowerCase().includes(filterQ.toLowerCase())
       )
     : docs;
