@@ -80,6 +80,11 @@ app.get("/:slug", optionalAuth, (c) => {
     return c.json({ error: "Forbidden" }, 403);
   }
 
+  if (doc.privacy === "public") {
+    db.prepare("UPDATE documents SET view_count = view_count + 1 WHERE id = ?").run(doc.id);
+    db.prepare("INSERT INTO document_views (doc_id) VALUES (?)").run(doc.id);
+  }
+
   // Attach owner info
   const owner = db.query<{ handle: string; display_name: string | null }, [number]>(
     "SELECT handle, display_name FROM users WHERE id = ?"

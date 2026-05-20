@@ -18,9 +18,10 @@ interface DocCardProps {
   created_at: number;
   owner_handle?: string;
   excerpt?: string;
+  weekly_views?: number;
 }
 
-export function DocCard({ slug, title, language, privacy, description, created_at, owner_handle, excerpt }: DocCardProps) {
+export function DocCard({ slug, title, language, privacy, description, created_at, owner_handle, excerpt, weekly_views }: DocCardProps) {
   const langColor = LANG_COLORS[language] ?? "#7A7A96";
 
   return (
@@ -59,6 +60,9 @@ export function DocCard({ slug, title, language, privacy, description, created_a
               {language}
             </span>
             <div className="flex items-center gap-2 text-[11px] text-ink-3">
+              {weekly_views != null && weekly_views > 0 && (
+                <span style={{ color: "#f97316" }}>{weekly_views} views</span>
+              )}
               {owner_handle && <span>@{owner_handle}</span>}
               <span>{formatRelative(created_at)}</span>
             </div>

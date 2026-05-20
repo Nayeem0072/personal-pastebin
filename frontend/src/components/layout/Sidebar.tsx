@@ -61,6 +61,12 @@ const SavedIcon = () => (
     <path d="M3 2h10a1 1 0 011 1v11l-5.5-2.75L3 14V3a1 1 0 011-1z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round"/>
   </svg>
 );
+const TrendingIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+    <path d="M2 11l3.5-4 3 2.5L12 5l2 1" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M11 4h3v3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
 const SharedIcon = () => (
   <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
     <path d="M2 9h3l1.5 2h3L11 9h3v4a.5.5 0 01-.5.5h-11A.5.5 0 012 13V9z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round"/>
@@ -154,6 +160,7 @@ export function Sidebar() {
       <nav style={{ display: "flex", flexDirection: "column", gap: 2, marginBottom: 24 }}>
         <NavLink to="/new" label="New Paste" icon={<PlusIcon />} exact />
         <NavLink to="/search" label="Explore" icon={<SearchIcon />} />
+        <NavLink to="/trending" label="Trending" icon={<TrendingIcon />} />
         <NavLink to={`/${user?.handle}`} label="My Pastes" icon={<DocsIcon />} />
         <NavLink to="/shared" label="Shared" icon={<SharedIcon />} />
         <NavLink to="/saved" label="Saved" icon={<SavedIcon />} />
@@ -263,6 +270,10 @@ export function MobileNav() {
       <Link to="/search" className={`mobile-nav-item ${active("/search") ? "active" : ""}`}>
         <SearchIcon />
         Explore
+      </Link>
+      <Link to="/trending" className={`mobile-nav-item ${active("/trending") ? "active" : ""}`}>
+        <TrendingIcon />
+        Trending
       </Link>
       <Link to={`/${user?.handle}`} className={`mobile-nav-item ${active(`/${user?.handle ?? "__"}`) ? "active" : ""}`}>
         <DocsIcon />

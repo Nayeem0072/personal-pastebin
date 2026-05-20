@@ -22,6 +22,7 @@ import JoinGroupPage from "./pages/group/JoinGroupPage";
 import GroupListPage from "./pages/group/GroupListPage";
 import SharedPage from "./pages/shared/SharedPage";
 import SavedPage from "./pages/saved/SavedPage";
+import TrendingPage from "./pages/trending/TrendingPage";
 import NotFoundPage from "./pages/errors/NotFoundPage";
 
 function HomeRedirect() {
@@ -39,6 +40,7 @@ export default function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/search" element={<SearchPage />} />
+        <Route path="/trending" element={<TrendingPage />} />
         <Route path="/docs/:slug" element={<DocPage />} />
         <Route path="/join/:code" element={<JoinGroupPage />} />
 
