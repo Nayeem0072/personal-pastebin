@@ -7,7 +7,7 @@ import { DocEditor } from "../../components/document/DocEditor";
 import { Button } from "../../components/ui/Button";
 import { useToast } from "../../components/ui/Toast";
 import { useAuth } from "../../hooks/useAuth";
-import { getDefaultLanguage, getDefaultPrivacy, setDefaultLanguage, setDefaultPrivacy } from "../../lib/pasteDefaults";
+import { getDefaultLanguage, getDefaultPrivacy, getDefaultGroupId, setDefaultLanguage, setDefaultPrivacy } from "../../lib/pasteDefaults";
 import { formatRelative } from "../../lib/utils";
 
 export default function NewDocPage() {
@@ -21,7 +21,7 @@ export default function NewDocPage() {
     content: "",
     language: getDefaultLanguage(),
     privacy: getDefaultPrivacy(),
-    groupId: null as number | null,
+    groupId: getDefaultGroupId(),
   });
 
   const { data: groupsData } = useQuery({

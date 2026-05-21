@@ -9,7 +9,7 @@ export default function TrendingPage() {
   const { data, isLoading } = useQuery({
     queryKey: ["trending"],
     queryFn: () => trendingApi.list(20, 7),
-    staleTime: 5 * 60_000,
+    staleTime: 60_000,
   });
 
   return (
