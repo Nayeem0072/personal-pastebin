@@ -4,7 +4,7 @@ import { detectLanguage } from "../../lib/detectLanguage";
 import { Select } from "../ui/Select";
 import { Input } from "../ui/Input";
 import { SUPPORTED_LANGUAGES, PRIVACY_OPTIONS } from "../../lib/constants";
-import { setDefaultLanguage, setDefaultPrivacy } from "../../lib/pasteDefaults";
+import { setDefaultLanguage, setDefaultPrivacy, setDefaultGroupId } from "../../lib/pasteDefaults";
 import type { Group } from "../../api/groups";
 
 interface DocEditorProps {
@@ -27,6 +27,7 @@ export function DocEditor({
   function handleSetDefault() {
     setDefaultLanguage(language);
     setDefaultPrivacy(privacy);
+    setDefaultGroupId(privacy === "group" ? groupId : null);
     setDefaultSaved(true);
     setTimeout(() => setDefaultSaved(false), 2000);
     onSetDefault?.();
