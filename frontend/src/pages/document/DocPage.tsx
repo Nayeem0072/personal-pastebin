@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { docsApi } from "../../api/documents";
@@ -67,6 +67,13 @@ const [sendOpen, setSendOpen] = useState(false);
       toast("Removed from saved", "success");
     },
   });
+
+  useEffect(() => {
+    if (data?.doc) {
+      document.title = `${data.doc.title || "Untitled"} — clippr`;
+      return () => { document.title = "Clippr"; };
+    }
+  }, [data?.doc?.title]);
 
   if (isLoading) return <PageLoader />;
   if (error) return (

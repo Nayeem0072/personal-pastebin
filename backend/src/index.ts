@@ -10,6 +10,7 @@ import searchRoutes from "./routes/search";
 import sendsRoutes from "./routes/sends";
 import savedRoutes from "./routes/saved";
 import trendingRoutes from "./routes/trending";
+import { ogRoutes } from "./routes/og";
 
 const app = new Hono();
 
@@ -24,6 +25,7 @@ app.route("/api/search", searchRoutes);
 app.route("/api/sends", sendsRoutes);
 app.route("/api/saved", savedRoutes);
 app.route("/api/trending", trendingRoutes);
+app.route("/api/og", ogRoutes);
 
 app.get("/health", (c) => c.json({ ok: true, ts: Date.now() }));
 

@@ -35,6 +35,13 @@ export default function JoinGroupPage() {
     }
   }, [isLoggedIn, data]);
 
+  useEffect(() => {
+    if (data?.group) {
+      document.title = `Join ${data.group.name} — clippr`;
+      return () => { document.title = "Clippr"; };
+    }
+  }, [data?.group?.name]);
+
   if (isLoading || authLoading) return <PageLoader />;
 
   if (error) {
