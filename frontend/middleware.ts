@@ -12,24 +12,19 @@ export default async function middleware(req: Request): Promise<Response> {
   if (!BOT_RE.test(ua)) return next();
 
   const url = new URL(req.url);
-  const apiUrl = (process.env.VITE_API_URL ?? "").replace(/\/$/, "");
-  if (!apiUrl) return next();
+  const apiUrl = process.env.VITE_API_URL ?? process.env.BACKEND_URL ?? "";
 
-  let metaPath: string | null = null;
-  const docsMatch = url.pathname.match(/^\/docs\/([^/]+)$/);
-  const joinMatch = url.pathname.match(/^\/join\/([^/]+)$/);
-  if (docsMatch) metaPath = `/api/og/meta/${docsMatch[1]}`;
-  else if (joinMatch) metaPath = `/api/og/meta/invite/${joinMatch[1]}`;
-  if (!metaPath) return next();
+  // Diagnostic response — no external fetch so we can confirm middleware runs
+  // and see what env vars are available.
+  const html = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>OG debug</title>
+  <meta property="og:title" content="mw=ok apiUrl=${apiUrl ? "SET" : "EMPTY"} path=${url.pathname}">
+  <meta property="og:description" content="${ua.slice(0, 80)}">
+</head>
+</html>`;
 
-  try {
-    const resp = await fetch(`${apiUrl}${metaPath}`);
-    if (!resp.ok) return next();
-    const html = await resp.text();
-    return new Response(html, {
-      headers: { "content-type": "text/html; charset=utf-8" },
-    });
-  } catch {
-    return next();
-  }
+  return new Response(html, { headers: { "content-type": "text/html; charset=utf-8" } });
 }
