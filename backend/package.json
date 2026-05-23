@@ -8,6 +8,7 @@
     "migrate": "bun run src/db/migrate.ts"
   },
   "dependencies": {
+    "@resvg/resvg-js": "^2.6.2",
     "hono": "^4.6.0",
     "jose": "^5.9.0",
     "nanoid": "^5.0.7",
