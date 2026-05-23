@@ -9,7 +9,7 @@
           "value": "(?i).*(bot|crawler|spider|slackbot|discordbot|facebookexternalhit|twitterbot|telegrambot|whatsapp|linkedinbot|applebot|googlebot|bingbot).*"
         }
       ],
-      "destination": "/api/og?type=doc&slug=:slug"
+      "destination": "${VITE_API_URL}/api/og/meta/:slug"
     },
     {
       "source": "/join/:code",
@@ -20,7 +20,7 @@
           "value": "(?i).*(bot|crawler|spider|slackbot|discordbot|facebookexternalhit|twitterbot|telegrambot|whatsapp|linkedinbot|applebot|googlebot|bingbot).*"
         }
       ],
-      "destination": "/api/og?type=invite&code=:code"
+      "destination": "${VITE_API_URL}/api/og/meta/invite/:code"
     },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
