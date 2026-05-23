@@ -1,1 +1,27 @@
-{ "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }] }
+{
+  "rewrites": [
+    {
+      "source": "/docs/:slug",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": "(?i).*(bot|crawler|spider|slackbot|discordbot|facebookexternalhit|twitterbot|telegrambot|whatsapp|linkedinbot|applebot|googlebot|bingbot).*"
+        }
+      ],
+      "destination": "/api/og?type=doc&slug=:slug"
+    },
+    {
+      "source": "/join/:code",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": "(?i).*(bot|crawler|spider|slackbot|discordbot|facebookexternalhit|twitterbot|telegrambot|whatsapp|linkedinbot|applebot|googlebot|bingbot).*"
+        }
+      ],
+      "destination": "/api/og?type=invite&code=:code"
+    },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
