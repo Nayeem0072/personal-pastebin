@@ -70,17 +70,17 @@ app.get("/image/:slug", (c) => {
     .map((l) => esc(trunc(l, 80)));
 
   const codeLines = lines
-    .map((l, i) => `<text x="60" y="${380 + i * 26}" font-family="monospace" font-size="15" fill="#8A8AA2">${l}</text>`)
+    .map((l, i) => `<text x="60" y="${380 + i * 26}" font-family="'DejaVu Sans Mono',monospace" font-size="15" fill="#8A8AA2">${l}</text>`)
     .join("\n    ");
 
   return c.body(svgToPng(`<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
   <rect width="1200" height="630" fill="#1C1C22"/>
   <rect width="1200" height="60" fill="#28282F"/>
-  <text x="40" y="38" font-family="monospace" font-size="18" font-weight="700" fill="#8A8AA2">clippr</text>
+  <text x="40" y="38" font-family="'DejaVu Sans Mono',monospace" font-size="18" font-weight="700" fill="#8A8AA2">clippr</text>
   <rect x="${1200 - 40 - (lang.length * 9 + 20)}" y="18" width="${lang.length * 9 + 20}" height="26" rx="6" fill="${color}" opacity="0.2"/>
-  <text x="${1200 - 40 - (lang.length * 9 + 20) + 10}" y="35" font-family="monospace" font-size="13" fill="${color}">${lang}</text>
-  <text x="60" y="130" font-family="monospace" font-size="36" font-weight="700" fill="#EEEEF5">${title}</text>
-  <text x="62" y="168" font-family="monospace" font-size="18" fill="#8A8AA2">@${handle}</text>
+  <text x="${1200 - 40 - (lang.length * 9 + 20) + 10}" y="35" font-family="'DejaVu Sans Mono',monospace" font-size="13" fill="${color}">${lang}</text>
+  <text x="60" y="130" font-family="'DejaVu Sans Mono',monospace" font-size="36" font-weight="700" fill="#EEEEF5">${title}</text>
+  <text x="62" y="168" font-family="'DejaVu Sans Mono',monospace" font-size="18" fill="#8A8AA2">@${handle}</text>
   <line x1="60" y1="194" x2="1140" y2="194" stroke="#38383F" stroke-width="1"/>
   ${codeLines}
   <rect y="626" width="1200" height="4" rx="3" fill="#00C4FF"/>
@@ -153,15 +153,15 @@ app.get("/image/invite/:code", (c) => {
   return c.body(svgToPng(`<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
   <rect width="1200" height="630" fill="#1C1C22"/>
   <rect width="1200" height="60" fill="#28282F"/>
-  <text x="40" y="38" font-family="monospace" font-size="18" font-weight="700" fill="#8A8AA2">clippr</text>
+  <text x="40" y="38" font-family="'DejaVu Sans Mono',monospace" font-size="18" font-weight="700" fill="#8A8AA2">clippr</text>
   <rect x="60" y="100" width="80" height="80" rx="22" fill="url(#grad)"/>
   <defs><linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00C4FF"/><stop offset="100%" stop-color="#0080FF"/></linearGradient></defs>
-  <text x="100" y="152" text-anchor="middle" font-family="monospace" font-size="36" font-weight="700" fill="#fff">${initial}</text>
-  <text x="60" y="220" font-family="monospace" font-size="16" fill="#8A8AA2">You're invited to join</text>
-  <text x="60" y="275" font-family="monospace" font-size="42" font-weight="700" fill="#EEEEF5">${name}</text>
-  ${desc ? `<text x="60" y="318" font-family="monospace" font-size="18" fill="#8A8AA2">${desc}</text>` : ""}
+  <text x="100" y="152" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="36" font-weight="700" fill="#fff">${initial}</text>
+  <text x="60" y="220" font-family="'DejaVu Sans Mono',monospace" font-size="16" fill="#8A8AA2">You're invited to join</text>
+  <text x="60" y="275" font-family="'DejaVu Sans Mono',monospace" font-size="42" font-weight="700" fill="#EEEEF5">${name}</text>
+  ${desc ? `<text x="60" y="318" font-family="'DejaVu Sans Mono',monospace" font-size="18" fill="#8A8AA2">${desc}</text>` : ""}
   <rect x="60" y="${desc ? 346 : 330}" width="${membersLabel.length * 10 + 24}" height="30" rx="8" fill="#38383F"/>
-  <text x="${60 + 12}" y="${desc ? 366 : 350}" font-family="monospace" font-size="14" fill="#8A8AA2">${membersLabel}</text>
+  <text x="${60 + 12}" y="${desc ? 366 : 350}" font-family="'DejaVu Sans Mono',monospace" font-size="14" fill="#8A8AA2">${membersLabel}</text>
   <rect y="626" width="1200" height="4" rx="3" fill="#00C4FF"/>
 </svg>`));
 });
@@ -217,9 +217,9 @@ function privateSvg() {
   return `<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
   <rect width="1200" height="630" fill="#1C1C22"/>
   <rect width="1200" height="60" fill="#28282F"/>
-  <text x="40" y="38" font-family="monospace" font-size="18" font-weight="700" fill="#8A8AA2">clippr</text>
-  <text x="600" y="295" text-anchor="middle" font-family="monospace" font-size="28" fill="#555568">Private paste</text>
-  <text x="600" y="335" text-anchor="middle" font-family="monospace" font-size="16" fill="#38383F">This paste is not public</text>
+  <text x="40" y="38" font-family="'DejaVu Sans Mono',monospace" font-size="18" font-weight="700" fill="#8A8AA2">clippr</text>
+  <text x="600" y="295" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="28" fill="#555568">Private paste</text>
+  <text x="600" y="335" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="16" fill="#38383F">This paste is not public</text>
   <rect y="626" width="1200" height="4" rx="3" fill="#00C4FF"/>
 </svg>`;
 }
@@ -228,9 +228,9 @@ function inviteUnavailableSvg() {
   return `<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
   <rect width="1200" height="630" fill="#1C1C22"/>
   <rect width="1200" height="60" fill="#28282F"/>
-  <text x="40" y="38" font-family="monospace" font-size="18" font-weight="700" fill="#8A8AA2">clippr</text>
-  <text x="600" y="295" text-anchor="middle" font-family="monospace" font-size="28" fill="#555568">Invite unavailable</text>
-  <text x="600" y="335" text-anchor="middle" font-family="monospace" font-size="16" fill="#38383F">This invite link has expired or is no longer valid</text>
+  <text x="40" y="38" font-family="'DejaVu Sans Mono',monospace" font-size="18" font-weight="700" fill="#8A8AA2">clippr</text>
+  <text x="600" y="295" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="28" fill="#555568">Invite unavailable</text>
+  <text x="600" y="335" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="16" fill="#38383F">This invite link has expired or is no longer valid</text>
   <rect y="626" width="1200" height="4" rx="3" fill="#00C4FF"/>
 </svg>`;
 }
