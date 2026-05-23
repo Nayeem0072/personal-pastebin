@@ -96,7 +96,7 @@ app.get("/image/:slug", (c) => {
 app.get("/meta/:slug", (c) => {
   const { slug } = c.req.param();
   const frontendUrl = (process.env.FRONTEND_URL ?? "").replace(/\/$/, "");
-  const backendOrigin = new URL(c.req.url).origin;
+  const backendOrigin = new URL(c.req.url).origin.replace(/^http:\/\//, "https://");
   const dest = `${frontendUrl}/docs/${slug}`;
 
   const row = db.query<
@@ -179,7 +179,7 @@ app.get("/image/invite/:code", (c) => {
 app.get("/meta/invite/:code", (c) => {
   const { code } = c.req.param();
   const frontendUrl = (process.env.FRONTEND_URL ?? "").replace(/\/$/, "");
-  const backendOrigin = new URL(c.req.url).origin;
+  const backendOrigin = new URL(c.req.url).origin.replace(/^http:\/\//, "https://");
   const dest = `${frontendUrl}/join/${code}`;
 
   c.header("Content-Type", "text/html; charset=utf-8");
